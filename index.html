@@ -1,1157 +1,1143 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.1">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Times; color: #061539; color: rgba(6, 21, 57, 0.7); -webkit-text-stroke: rgba(6, 21, 57, 0.7)}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Times; color: #155b23; -webkit-text-stroke: #155b23}
-    span.s1 {font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: 0px #000000}
-    span.s2 {font-kerning: none; color: #0d3ec5; -webkit-text-stroke: 0px #0d3ec5}
-    span.s3 {font-kerning: none}
-    span.s4 {font-kerning: none; color: rgba(6, 21, 57, 0.7); -webkit-text-stroke: 0px rgba(6, 21, 57, 0.7)}
-    span.s5 {font-kerning: none; color: #155b23; -webkit-text-stroke: 0px #155b23}
-    span.Apple-tab-span {white-space:pre}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beatbay: The Legal Problem, Solved.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-blue: #7086ff; /* Main highlight blue from references */
+            --cta-blue: #3b82f6; /* Brighter blue for primary buttons */
+            --background-dark: #0D0D0D; /* Pitch black background */
+            --card-bg: #1A1A1A; /* Dark charcoal card background */
+            --input-bg: #2C2C2C; /* Dark input background */
+            --border-color: #333333; /* Subtle border color */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark);
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; }
+        
+        /* New Header Styling */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -1px;
+        }
+        .nav-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .nav-button-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: #f3f4f6;
+        }
+        .nav-button-secondary:hover {
+            background-color: var(--card-bg);
+            border-color: #555;
+        }
+        .nav-button-primary {
+            background-color: var(--cta-blue);
+            color: white;
+            border: 1px solid var(--cta-blue);
+        }
+        .nav-button-primary:hover {
+            background-color: #2563eb;
+        }
+
+        /* Feature Card (from reference) */
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .feature-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: rgba(112, 134, 255, 0.1);
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+        }
+
+        /* How it Works (from reference) */
+        .how-it-works-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        /* Live Chat Styling */
+        #live-chat {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8);
+            z-index: 50;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        #chat-header {
+            cursor: pointer;
+            padding: 12px;
+            background-color: #111;
+        }
+        #chat-content {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        #live-chat.collapsed #chat-content { height: 0; padding: 0; border: none; }
+        #chat-icon { transform: rotate(180deg); }
+        #live-chat.collapsed #chat-icon { transform: rotate(0deg); }
+        #chat-window {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .chat-message { margin-bottom: 8px; padding: 4px 8px; border-radius: 6px; background-color: #2c2c2c; }
+        .chat-message-user { font-weight: 600; color: var(--accent-blue); }
+
+        /* Input/Button focus styling */
+        .focus-ring:focus {
+            box-shadow: 0 0 0 3px rgba(112, 134, 255, 0.5); /* Accent blue glow */
+            border-color: var(--accent-blue);
+        }
+
+        /* Tab Styling */
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #9ca3af;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab-button.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+        
+        /* Marketplace & Uploader General Styling */
+        .main-page-section {
+            padding-top: 2rem;
+        }
+        
+        .scoreboard-card {
+            background-color: var(--card-bg); 
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        /* Beat Card Styling */
+        .beat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        .beat-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(112, 134, 255, 0.1);
+        }
+
+        /* Custom input style to match references */
+        .custom-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(112, 134, 255, 0.4);
+        }
+        
+        /* Membership Gate (Reference Image) */
+        #membership-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #membership-gate.locked {
+            opacity: 1;
+            visibility: visible;
+        }
+        .gate-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+    </style>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Beatbay: The Legal Problem, Solved.&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--accent-blue: #7086ff; /* Main highlight blue from references */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--cta-blue: #3b82f6; /* Brighter blue for primary buttons */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--background-dark: #0D0D0D; /* Pitch black background from references */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--card-bg: #1A1A1A; /* Dark charcoal card background */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--input-bg: #2C2C2C; /* Dark input background */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--border-color: #333333; /* Subtle border color */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--background-dark);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #f3f4f6;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container { max-width: 1200px; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* New Header Styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.app-header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.5rem 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.logo {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 900;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: -1px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-button {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.2s ease;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-button-secondary {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #f3f4f6;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-button-secondary:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #555;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-button-primary {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--cta-blue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--cta-blue);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-button-primary:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Feature Card (from reference) */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.feature-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: flex-start;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.feature-icon {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(112, 134, 255, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* How it Works (from reference) */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.how-it-works-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Live Chat Styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#live-chat {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>right: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 300px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 50;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#chat-header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #111;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#chat-content {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 400px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: height 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#live-chat.collapsed #chat-content { height: 0; padding: 0; border: none; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#chat-icon { transform: rotate(180deg); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#live-chat.collapsed #chat-icon { transform: rotate(0deg); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#chat-window {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-grow: 1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column-reverse;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.chat-message { margin-bottom: 8px; padding: 4px 8px; border-radius: 6px; background-color: #2c2c2c; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.chat-message-user { font-weight: 600; color: var(--accent-blue); }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Input/Button focus styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.focus-ring:focus {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 0 3px rgba(112, 134, 255, 0.5); /* Accent blue glow */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Tab Styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.tab-button {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #9ca3af;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 3px solid transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.2s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.tab-button.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom-color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Marketplace &amp; Uploader General Styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.main-page-section {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.scoreboard-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Beat Card Styling */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.beat-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.2s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.beat-card:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 20px rgba(112, 134, 255, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Custom input style to match references */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.custom-input {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--input-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.custom-input:focus {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: var(--accent-blue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 0 2px rgba(112, 134, 255, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Membership Gate (Reference Image) */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#membership-gate {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(0, 0, 0, 0.8);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 100;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>visibility: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#membership-gate.locked {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>visibility: visible;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.gate-content {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 500px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="p-4 md:p-8"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Firebase SDKs --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="module"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, serverTimestamp, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- GLOBAL FIREBASE/AUTH SETUP ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.db = null;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.auth = null;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.storage = null; // Added Firebase Storage</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.userId = null;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.globalUserName = 'Anonymous';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.isPaid = false; // Default to false, check from DB</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.isProducer = false; // Default to false, check from DB</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>setLogLevel('Debug');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';</p>
-<p class="p3"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s3"> firebaseConfig = {</span></p>
-<p class="p4"><span class="s4"><span class="Apple-tab-span">	</span>apiKey: </span><span class="s3">"AIzaSyDi8U65b5gPQPLh-4rXovj8FCNkhdZm11k"</span><span class="s4">,</span></p>
-<p class="p4"><span class="s4"><span class="Apple-tab-span">	</span>authDomain: </span><span class="s3">"beatbay-1272b.firebaseapp.com"</span><span class="s4">,</span></p>
-<p class="p4"><span class="s4"><span class="Apple-tab-span">	</span>projectId: </span><span class="s3">"beatbay-1272b"</span><span class="s4">,</span></p>
-<p class="p4"><span class="s4"><span class="Apple-tab-span">	</span>storageBucket: </span><span class="s3">"beatbay-1272b.firebasestorage.app"</span><span class="s4">,</span></p>
-<p class="p3"><span class="s3"><span class="Apple-tab-span">	</span>messagingSenderId: </span><span class="s5">"665343591382"</span><span class="s3">,</span></p>
-<p class="p4"><span class="s4"><span class="Apple-tab-span">	</span>appId: </span><span class="s3">"1:665343591382:web:ca4776fb892a10c564da77"</span><span class="s4">,</span></p>
-<p class="p3"><span class="s3"><span class="Apple-tab-span">	</span>measurementId: </span><span class="s5">"G-331FTL8QJS"</span></p>
-<p class="p3"><span class="s3"><span class="Apple-tab-span">	</span>};</span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (firebaseConfig) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const app = initializeApp(firebaseConfig);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.db = getFirestore(app);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.auth = getAuth(app);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.storage = getStorage(app); // Initialize Storage</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>onAuthStateChanged(window.auth, async (user) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>try {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (user) {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>window.userId = user.uid;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>window.globalUserName = user.displayName || `User_${window.userId.substring(0, 4)}`;</p>
-<p class="p2"><span class="Apple-converted-space">                            </span></p>
-<p class="p1"><span class="Apple-converted-space">                            </span>// --- REAL AUTH CHECK ---</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>// This block checks for user data and is a common source of permission errors</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>const userDocSnap = await getDoc(userDocRef);</p>
-<p class="p2"><span class="Apple-converted-space">                                </span></p>
-<p class="p1"><span class="Apple-converted-space">                                </span>if (userDocSnap.exists()) {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>const userData = userDocSnap.data();</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>window.isPaid = userData.isPaid || false;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>window.isProducer = userData.isProducer || false;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>window.globalUserName = userData.displayName || window.globalUserName;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>// New user, create their doc</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>await setDoc(userDocRef, {</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>uid: window.userId,</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>displayName: window.globalUserName,</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>email: user.email,</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>isPaid: false,</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>isProducer: false</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>} catch (firestoreError) {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>// **FIX:** Catch the specific permission error here</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>if (firestoreError.code === 'permission-denied' || firestoreError.message.includes('Missing or insufficient permissions')) {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>console.warn(`Auth state: Permission denied while fetching user doc for ${window.userId}. Running in limited mode.`);</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>// Proceed without user data, remaining in a "guest" state</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>window.isPaid = false;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>window.isProducer = false;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>// Throw other, unexpected errors</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>throw firestoreError;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">                            </span></p>
-<p class="p1"><span class="Apple-converted-space">                            </span>console.log(`Firebase: User signed in. ID: ${window.userId}, Name: ${window.globalUserName}, Paid: ${window.isPaid}, Producer: ${window.isProducer}`);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                            </span>setupLiveChat(appId, window.db);</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>fetchTotalEarnings(appId, window.db);</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>setupBeatListener(appId, window.db); // &lt;-- NEW: Load real beats</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>updateUIForUser();</p>
-<p class="p2"><span class="Apple-converted-space">                            </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>await signInAnonymously(window.auth);</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>console.log("Firebase: Signed in anonymously.");</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} catch (authError) {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>// This outer catch handles any other errors during the auth process</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error("Unhandled error during auth state change:", authError);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>// Fallback to simulated mode if auth setup fails</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>document.getElementById('firebase-status').innerText = 'Status: Auth Error (Simulated)';</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>window.userId = 'mock-user-123';</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>window.globalUserName = localStorage.getItem('userName') || 'MockUser';</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>setupLiveChat(appId, null);</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>fetchTotalEarnings(appId, null);</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (initialAuthToken) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>signInWithCustomToken(window.auth, initialAuthToken).catch(error =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error("Firebase Auth Error: Custom token sign-in failed.", error);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>signInAnonymously(window.auth);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else if (!window.auth.currentUser) {</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>signInAnonymously(window.auth);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>console.error("Firebase Initialization Error:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('firebase-status').innerText = 'Error: Firebase failed to initialize.';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">             </span>console.error("Firebase config missing. Running in simulated mode.");</p>
-<p class="p1"><span class="Apple-converted-space">             </span>document.getElementById('firebase-status').innerText = 'Status: Offline (Simulated)';</p>
-<p class="p1"><span class="Apple-converted-space">             </span>window.userId = 'mock-user-123';</p>
-<p class="p1"><span class="Apple-converted-space">             </span>window.globalUserName = localStorage.getItem('userName') || 'MockUser';</p>
-<p class="p1"><span class="Apple-converted-space">             </span>setupLiveChat(appId, null);</p>
-<p class="p1"><span class="Apple-converted-space">             </span>fetchTotalEarnings(appId, null);</p>
-<p class="p1"><span class="Apple-converted-space">             </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- CORE FUNCTIONS ---</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 1. EARNINGS COUNTER</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function fetchTotalEarnings(appId, dbInstance) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const earningsElement = document.getElementById('total-earnings');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const metricsDocPath = `/artifacts/${appId}/public/data/metrics/earnings`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const mockEarnings = `£75,450.50`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (dbInstance) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const docRef = doc(dbInstance, metricsDocPath);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>onSnapshot(docRef, (docSnap) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (docSnap.exists()) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const totalSales = docSnap.data().totalSales || 0;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const producerShare = totalSales * 0.9;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>earningsElement.textContent = `£${producerShare.toLocaleString('en-GB', { minimumFractionDigits: 2 })}`;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>earningsElement.textContent = mockEarnings;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}, (error) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.warn("Using mock earnings due to permission block.");</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>earningsElement.textContent = mockEarnings;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error("Error fetching earnings:", error.message);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>earningsElement.textContent = mockEarnings;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>earningsElement.textContent = mockEarnings;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 2. LIVE CHAT IMPLEMENTATION</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function setupLiveChat(appId, dbInstance) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const chatWindow = document.getElementById('chat-window');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const chatInput = document.getElementById('chat-input');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const chatCollectionPath = `/artifacts/${appId}/public/data/global_chat`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Lock chat input if not paid</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.placeholder = "Purchase access to join the chat!";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.placeholder = "Type message and press Enter...";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (dbInstance) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const q = query(collection(dbInstance, chatCollectionPath), limit(50));<span class="Apple-converted-space"> </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>onSnapshot(q, (snapshot) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const messages = [];</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>snapshot.forEach(doc =&gt; messages.push(doc.data()));</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>messages.sort((a, b) =&gt; (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0));</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>chatWindow.innerHTML = '';<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>messages.forEach((message) =&gt; {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>displayMessage(chatWindow, message.userName, message.text, message.timestamp);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>chatWindow.scrollTop = chatWindow.scrollHeight;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>}, (error) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// **FIX:** Handle chat permission errors gracefully</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.warn("Permission denied fetching chat. Chat disabled.");</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>displayMessage(chatWindow, 'SYSTEM', 'Chat unavailable (permissions).', new Date());</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error("Error fetching chat:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.addEventListener('keypress', async (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (e.key === 'Enter' &amp;&amp; chatInput.value.trim() !== '' &amp;&amp; window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>e.preventDefault();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const messageText = chatInput.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>await addDoc(collection(dbInstance, chatCollectionPath), {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>userName: window.globalUserName,</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>text: messageText,</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>timestamp: serverTimestamp(),</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>userId: window.userId</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>chatInput.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>console.error("Error sending message:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>console.log("Running in Chat Mock Mode. Messages will not be persisted.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>displayMessage(chatWindow, 'SYSTEM', 'Chat is in mock mode.', new Date());</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function displayMessage(chatWindow, userName, text, timestamp) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const messageElement = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>messageElement.className = 'chat-message';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const time = timestamp ? (timestamp.toDate ? timestamp.toDate().toLocaleTimeString() : new Date(timestamp).toLocaleTimeString()) : new Date().toLocaleTimeString();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>messageElement.innerHTML = `&lt;span class="chat-message-user"&gt;${userName || 'User'}&lt;/span&gt;: &lt;span&gt;${text}&lt;/span&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>chatWindow.appendChild(messageElement);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.postBeatComment = async function(beatId, commentInputId) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.showMembershipGate();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// ... (rest of comment logic)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.switchTab = function(tabName) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.tab-content').forEach(el =&gt; el.classList.add('hidden'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.tab-button').forEach(el =&gt; el.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(`${tabName}-content`).classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(`tab-${tabName}`).classList.add('active');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (tabName === 'discover') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// This is now handled by the live listener (setupBeatListener)</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// We just need to make sure the view is populated</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const list = document.getElementById('beats-list');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (list.innerHTML.trim() === '') {</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>displayBeats(window.allBeats || []); // Display cached beats</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('discover-title').textContent = `Algorithmic Discovery`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (tabName === 'trending') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.displayBeatsListPlaceholder();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.displayBeatsListPlaceholder = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('beats-list').innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="col-span-full text-center p-8 text-gray-400"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>&lt;p class="text-xl"&gt;Select a producer profile on the left to see their full catalog, or use the Discover tab.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.viewProducerProfile = function(producerName) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('tab-discover').click();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const filteredBeats = (window.allBeats || []).filter(b =&gt; b.producerName === producerName);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.displayBeats(filteredBeats);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('discover-title').textContent = `Catalog for: ${producerName}`;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- NEW: REAL BEAT LISTENER ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.allBeats = []; // Cache for beats</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function setupBeatListener(appId, dbInstance) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!dbInstance) return;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const beatsCollectionPath = `/artifacts/${appId}/public/data/beats`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const q = query(collection(dbInstance, beatsCollectionPath), limit(50));</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>onSnapshot(q, (snapshot) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const beats = [];</p>
-<p class="p1"><span class="Apple-converted-space">                </span>snapshot.forEach(doc =&gt; beats.push({ id: doc.id, ...doc.data() }));</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.allBeats = beats; // Update cache</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Only update the view if the user is on the discover tab</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (document.getElementById('tab-discover').classList.contains('active')) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>displayBeats(window.allBeats);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, (error) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// **FIX:** Check for permission error and log a warning instead of an error</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>console.warn("Permission denied fetching beats. Displaying empty list.");<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>displayBeats([]); // Show empty list gracefully</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>console.error("Error fetching beats:", error); // Log other errors</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.displayBeats = function(beats) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const list = document.getElementById('beats-list');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>list.innerHTML = '';<span class="Apple-converted-space"> </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (beats.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>list.innerHTML = `&lt;div class="col-span-full text-center p-8 text-gray-400"&gt;No beats found matching criteria.&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>beats.forEach(beat =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const beatCard = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="beat-card p-4 rounded-xl shadow-lg relative"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center justify-between mb-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="text-xl font-bold text-white"&gt;${beat.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-3xl font-extrabold text-[var(--accent-blue)]"&gt;£${Number(beat.price).toFixed(2)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm text-gray-400 mb-2"&gt;Producer: &lt;span class="font-semibold text-[var(--cta-blue)]"&gt;${beat.producerName}&lt;/span&gt;&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center space-x-4 text-sm text-gray-400 mb-4 border-t border-b border-[var(--border-color)] py-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="flex items-center"&gt;BPM: ${beat.bpm}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="flex items-center"&gt;${beat.genre}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-xs font-bold text-red-500"&gt;50/50 SPLIT&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;button class="px-4 py-2 bg-[var(--accent-blue)] text-white rounded-lg flex items-center hover:bg-[#5a6be3] transition duration-200 shadow-md"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"&gt;&lt;path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/&gt;&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>Preview</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="handleBeatPurchase()" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}"&gt;BUY &amp; SPLIT&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;!-- Comment Section --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-4 pt-4 border-t border-[var(--border-color)]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h5 class="text-sm font-semibold text-white mb-2"&gt;Beat Comments:&lt;/h5&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div id="comments-list-${beat.id}" class="text-xs max-h-24 overflow-y-auto mb-2 p-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="text-sm mb-2 text-gray-400"&gt;&lt;span class="font-bold text-blue-400"&gt;MC Flow&lt;/span&gt;: Just what I needed.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="comment-input-${beat.id}" placeholder="Add a comment..."<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                                </span>class="w-full p-2 text-sm rounded-md custom-input focus-ring"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                                </span>onkeypress="if(event.key === 'Enter') postBeatComment('${beat.id}', 'comment-input-${beat.id}');"</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>${!window.isPaid ? 'disabled' : ''}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>list.innerHTML += beatCard;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Re-apply disabled state to inputs</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.querySelectorAll('.beat-card input').forEach(input =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.placeholder = "Purchase access to comment.";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// MOCK DATA (REMOVED, NOW USES FIRESTORE)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// const mockBeats = [ ... ];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- GATEKEEPING AND NAVIGATION FUNCTIONS ---</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.handleBeatPurchase = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.showMembershipGate();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert('PURCHASE SUCCESSFUL! Your split sheet and files are being emailed now.');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// ARTIST PAYS - NOW WITH REAL AUTH</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.handleLifetimePurchase = async function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const userName = document.getElementById('accessName').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const email = document.getElementById('accessEmail').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const password = "password123"; // In a real app, you'd have a password field. For this, we mock it.</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!userName || !email) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("Please enter a Full Name and Email before purchasing.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// --- THIS IS THE REAL PAYMENT LOGIC ---</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 1. Call Stripe to take £39.99</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 2. On success, THEN create the user and set their permissions.</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// For now, we skip Stripe and go straight to user creation</p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Try to create a new user</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await updateProfile(userCredential.user, { displayName: userName });</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.userId = userCredential.user.uid;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.globalUserName = userName;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Update their Firestore doc with 'isPaid'</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await setDoc(userDocRef, {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>uid: window.userId,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>displayName: userName,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>email: email,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>isPaid: true,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>isProducer: false</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}, { merge: true });</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.isPaid = true;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.hideMembershipGate();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert(`WELCOME, ${userName}! Lifetime Access Granted. You can now buy, upload, and chat.`);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (error.code === 'auth/email-already-in-use') {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// User already exists, just sign them in and update their status (if payment was successful)</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>await signInWithEmailAndPassword(window.auth, email, password);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>// This assumes they *just* paid again, or are re-verifying.</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>// In a real app, you'd check if they are *already* paid.</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.auth.currentUser.uid}`);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>await updateDoc(userDocRef, { isPaid: true }); // Grant access</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>window.isPaid = true;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>window.hideMembershipGate();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>alert(`Welcome back, ${userName}! Access granted.`);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} catch (signInError) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>alert("Error: This email is in use. Please try logging in or use a different email.");</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error("Sign in error:", signInError);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>console.error("Artist sign up error:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>alert("Error creating account. Please try again.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// PRODUCER SIGNS UP (FREE) - NOW WITH REAL AUTH</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.handleProducerSignUp = async function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const producerName = document.getElementById('producerName').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const producerEmail = document.getElementById('producerEmail').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const password = "password123"; // Mock password</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!producerName || !producerEmail) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("Please enter your Producer Name and Email to sign up.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const userCredential = await createUserWithEmailAndPassword(window.auth, producerEmail, password);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await updateProfile(userCredential.user, { displayName: producerName });</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.userId = userCredential.user.uid;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.globalUserName = producerName;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Update their Firestore doc with 'isProducer'</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await setDoc(userDocRef, {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>uid: window.userId,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>displayName: producerName,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>email: producerEmail,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>isPaid: false, // Producers don't need to pay</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>isProducer: true</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}, { merge: true });</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.isProducer = true;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>updateUIForUser();</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (error.code === 'auth/email-already-in-use') {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// User exists. Sign them in and grant producer status</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>await signInWithEmailAndPassword(window.auth, producerEmail, password);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.auth.currentUser.uid}`);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>await updateDoc(userDocRef, { isProducer: true, displayName: producerName });</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>window.isProducer = true;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} catch (signInError) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>alert("Error: This email is in use. Please try logging in or use a different email.");</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>console.error("Producer sign up error:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>alert("Error creating account. Please try again.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- NEW: V1 MANUAL BEAT UPLOAD ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.handleManualBeatUpload = async function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const beatTitle = document.getElementById('beatTitle').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const beatGenre = document.getElementById('beatGenre').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const beatBPM = document.getElementById('beatBPM').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const beatPrice = document.getElementById('beatPrice').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const mp3File = document.getElementById('mp3File').files[0];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const stemsZip = document.getElementById('stemsZip').files[0];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const uploadStatus = document.getElementById('upload-status');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!beatTitle || !beatGenre || !beatBPM || !beatPrice || !mp3File || !stemsZip) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("Please fill out all fields and upload both files.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (Number(beatPrice) &gt; 9.99) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("Price cannot be more than £9.99.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!window.isProducer || !window.userId) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("You must be signed in as a producer to upload.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>uploadStatus.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>uploadStatus.textContent = 'Uploading files (this may take a moment)...';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 1. Upload MP3</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const mp3StoragePath = `beats/${window.userId}/${beatTitle}_preview.mp3`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const mp3Ref = ref(window.storage, mp3StoragePath);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await uploadBytes(mp3Ref, mp3File);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const mp3Url = await getDownloadURL(mp3Ref);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 2. Upload Stems ZIP</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const stemsStoragePath = `beats/${window.userId}/${beatTitle}_stems.zip`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const stemsRef = ref(window.storage, stemsStoragePath);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>await uploadBytes(stemsRef, stemsZip);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const stemsUrl = await getDownloadURL(stemsRef);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 3. Write metadata to Firestore</p>
-<p class="p1"><span class="Apple-converted-space">                </span>uploadStatus.textContent = 'Writing to database...';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const beatsCollectionPath = `/artifacts/${appId}/public/data/beats`;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>await addDoc(collection(window.db, beatsCollectionPath), {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>title: beatTitle,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>genre: beatGenre,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>bpm: Number(beatBPM),</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>price: Number(beatPrice),</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>producerId: window.userId,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>producerName: window.globalUserName,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>mp3Url: mp3Url,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>stemsUrl: stemsUrl,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>createdAt: serverTimestamp(),</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sales: 0</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>uploadStatus.textContent = `SUCCESS! "${beatTitle}" is now live on the marketplace.`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('manual-upload-form').reset();</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>uploadStatus.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}, 4000);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>console.error("Beat Upload Error:", error);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>uploadStatus.textContent = `Error: ${error.message}`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.showMembershipGate = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('membership-gate').classList.add('locked');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.hideMembershipGate = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('membership-gate').classList.remove('locked');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// This function updates all UI elements based on auth state</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.updateUIForUser = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Update chat</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const chatInput = document.getElementById('chat-input');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.placeholder = "Type message and press Enter...";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chatInput.placeholder = "Purchase access to join the chat!";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Update comment inputs</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.beat-card input').forEach(input =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(window.isPaid) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.placeholder = "Add a comment...";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>input.placeholder = "Purchase access to comment.";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Update producer portal</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (window.isProducer) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('producer-signup-form').classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('producer-uploader-tool-v1').classList.remove('hidden'); // &lt;-- Show V1 uploader</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('producer-welcome-name').textContent = window.globalUserName;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('producer-signup-form').classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('producer-uploader-tool-v1').classList.add('hidden'); // &lt;-- Hide V1 uploader</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- NAVIGATION LOGIC ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.navigate = function(pageId) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.main-page-section').forEach(section =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>section.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(pageId).classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.location.hash = '#' + pageId.replace('-page', '');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (pageId === 'marketplace-page') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>window.switchTab('trending');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- CHAT COLLAPSE LOGIC ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.toggleChat = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('live-chat').classList.toggle('collapsed');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onload = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Handle URL navigation or default to landing page</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const initialHash = window.location.hash.substring(1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let targetPage;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (initialHash === 'marketplace') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'marketplace-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (initialHash === 'uploader') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'uploader-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'landing-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.navigate(targetPage);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Re-check UI state on load</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateUIForUser();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onhashchange = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const currentHash = window.location.hash.substring(1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let targetPage;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentHash === 'marketplace') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'marketplace-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (currentHash === 'uploader') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'uploader-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>targetPage = 'landing-page';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.navigate(targetPage);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="firebase-status" class="fixed top-2 left-2 text-xs text-yellow-500 z-50"&gt;Status: Initializing...&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="container mx-auto relative min-h-[1200px]"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- MEMBERSHIP GATE MODAL (Styled after the "Unlock Your Lifetime Access" reference) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="membership-gate" class="p-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="gate-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 id="gate-headline-primary" class="text-3xl md:text-4xl font-extrabold text-white mb-2 text-center"&gt;UNLOCK YOUR &lt;span class="text-[var(--accent-blue)]"&gt;LIFETIME ACCESS&lt;/span&gt;&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="gate-subtitle" class="text-lg text-gray-400 mb-6 text-center"&gt;Join hundreds of artists already creating with legal clarity.&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="p-6 bg-[#111] rounded-lg border border-[var(--border-color)]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p id="gate-form-title" class="text-sm font-semibold text-gray-300 mb-4"&gt;Artist Registration | One-time payment of &lt;span class="text-white font-bold"&gt;£39.99&lt;/span&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;form onsubmit="event.preventDefault(); handleLifetimePurchase();"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="accessName" class="block text-sm font-medium text-gray-300 mb-1"&gt;Full Name *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="accessName" placeholder="John Doe" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="accessEmail" class="block text-sm font-medium text-gray-300 mb-1"&gt;Email Address *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="email" id="accessEmail" placeholder="john@example.com" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="accessPRO" class="block text-sm font-medium text-gray-300 mb-1"&gt;PRO/IPI Number (Optional)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="accessPRO" placeholder="e.g., 00123456789 (ASCAP, BMI, etc)" class="w-full p-3 mb-6 rounded-md custom-input focus-ring"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xs text-gray-500 mb-4"&gt;By submitting, you agree to the mandatory 50/50 publishing split terms. You will receive automatic split sheets for all beat purchases.&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="gate-submit-btn" type="submit" class="w-full p-4 bg-[var(--cta-blue)] text-white font-extrabold text-xl rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>PAY £39.99 AND ENTER THE VAULT</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="hideMembershipGate()" class="mt-4 text-gray-500 hover:text-white text-sm w-full text-center"&gt;Cancel&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- END MEMBERSHIP GATE --&gt;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- HEADER &amp; NAVIGATION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;header id="header-section" class="text-center py-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="container mx-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#landing" onclick="navigate('landing-page')" class="logo"&gt;BEATBAY&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="space-x-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="navigate('marketplace-page')" class="nav-button nav-button-secondary"&gt;Marketplace&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="navigate('uploader-page')" class="nav-button nav-button-primary"&gt;Producer Portal&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- EARNINGS COUNTER (Moved here) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mt-6 p-4 bg-gray-900 border border-[var(--border-color)] rounded-lg max-w-sm mx-auto shadow-xl text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-lg font-semibold text-gray-300"&gt;Total Producer Earnings&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p id="total-earnings" class="text-4xl font-extrabold text-[var(--accent-blue)] mt-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>Loading...</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-gray-500 mt-1"&gt;This figure updates in real-time from sales data.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- 0. LANDING PAGE (NEW) - Based on reference 21.53.35.png --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="landing-page" class="main-page-section hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center py-16"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1 class="text-5xl md:text-7xl font-extrabold text-white"&gt;The &lt;span class="text-[var(--accent-blue)]"&gt;Legal Problem&lt;/span&gt;. Solved.&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-xl text-gray-400 mt-4 max-w-3xl mx-auto"&gt;Music publishing is complex. Splits cause disputes. We automate the entire process to ensure you get paid, fairly and automatically.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Feature Grid (from reference) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-12"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="feature-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="feature-icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0L15 15.182M12 6a2.25 2.25 0 0 0-2.25 2.25v1.5a2.25 2.25 0 0 0 2.25 2.25m0-3.75a2.25 2.25 0 0 1 2.25 2.25v1.5a2.25 2.25 0 0 1-2.25 2.25M12 6v12" /&gt;&lt;/svg&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-white mb-2"&gt;Lifetime Access. Zero Subscriptions.&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-400"&gt;Pay once. Access forever. No monthly fees, no hidden costs. Just £39.99 for unlimited marketplace access.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="feature-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="feature-icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-12 6v4.75A2.25 2.25 0 0 1 6.75 18H3.75m8.25-13.5H21M3.75 9v.75c0 .414.336.75.75.75h.75m0 0v-.75c0-.414-.336.75-.75-.75h-.75M15 4.5v.75A.75.75 0 0 1 14.25 6h-.75m0 0v-.75A.75.75 0 0 1 14.25 4.5h.75M15 9v.75c0 .414.336.75.75.75h.75m0 0v-.75c0-.414-.336.75-.75-.75h-.75" /&gt;&lt;/svg&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-white mb-2"&gt;Every Beat Under £9.99. Guaranteed.&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-400"&gt;No expensive lease tiers. Every beat, every stem pack is capped at £9.99. Professional quality, fair pricing.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="feature-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="feature-icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /&gt;&lt;/svg&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-white mb-2"&gt;Automatic Publishing Rights Protection&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-400"&gt;The 50/50 Split. Every purchase auto-generates a legally binding split sheet. You get 50% publishing as the artist. The producer keeps 50%. No negotiations, no disputes. Just clarity.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="feature-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="feature-icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 9m-8 10.5a9 9 0 1 1 18 0a9 9 0 0 1-18 0Z" /&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /&gt;&lt;/svg&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-white mb-2"&gt;Instant Stems &amp; Files&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-400"&gt;Download high-quality stems, WAVs, and MP3s instantly. Full creative control. Professional-grade files ready for your DAW.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- How it Works (from reference) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="how-it-works-card max-w-4xl mx-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-3xl font-extrabold text-white text-center mb-6"&gt;How It Works&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-lg text-gray-400 mb-6 text-center"&gt;When you purchase a beat for £9.99, our system **instantly generates** a mandatory publishing split sheet (PDF). This document clearly states:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;ul class="space-y-4 text-lg text-gray-300"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li class="flex"&gt;&lt;span class="text-green-400 mr-3"&gt;✔&lt;/span&gt; **50% composition publishing** to the producer (as composer).&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li class="flex"&gt;&lt;span class="text-green-400 mr-3"&gt;✔&lt;/span&gt; **50% composition publishing** to you (as topliner/songwriter).&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li class="flex"&gt;&lt;span class="text-green-400 mr-3"&gt;✔&lt;/span&gt; Non-exclusive licensing for the master recording.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-sm text-gray-500 mt-6"&gt;Both parties receive this document via email immediately after purchase. This ensures compliance with PROs (PRS, ASCAP, BMI) and prepares you for future label deals.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- 1. MARKETPLACE PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="marketplace-page" class="main-page-section hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- TAB NAVIGATION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex border-b border-[var(--border-color)] mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="tab-trending" class="tab-button active" onclick="switchTab('trending')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>🔥 Trending Producers (Scoreboard)</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="tab-discover" class="tab-button" onclick="switchTab('discover')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>🎵 Discover Beats (Filters)</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- TAB CONTENT CONTAINER --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid grid-cols-1 lg:grid-cols-4 gap-6"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- LEFT COLUMN: TRENDING SCOREBOARD --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="trending-content" class="tab-content col-span-1 w-full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="text-xl font-bold text-white mb-3"&gt;Top Producers (All-Time Sales)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="scoreboard-card p-4 space-y-3 w-full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('DJ Shadow-box')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span&gt;#1 DJ Shadow-box&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-[var(--accent-blue)] font-extrabold"&gt;£12k&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('Lofi_Llama')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span&gt;#2 Lofi_Llama&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-[var(--accent-blue)] font-extrabold"&gt;£8.5k&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('SynthGod')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span&gt;#3 SynthGod&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-[var(--accent-blue)] font-extrabold"&gt;£6.1k&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- RIGHT COLUMN: DISCOVER BEATS --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="discover-content" class="tab-content hidden lg:col-span-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 id="discover-title" class="text-xl font-bold text-white mb-4"&gt;Algorithmic Discovery&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-wrap gap-4 mb-6 p-4 rounded-lg border border-[var(--border-color)] bg-[#111]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" placeholder="Search by title, tags, or mood..." class="flex-grow p-2 rounded-lg custom-input focus-ring min-w-[200px]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select class="p-2 rounded-lg custom-input min-w-[120px]"&gt;&lt;option&gt;Genre: All&lt;/option&gt;&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select class="p-2 rounded-lg custom-input min-w-[120px]"&gt;&lt;option&gt;BPM: Any&lt;/option&gt;&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select class="p-2 rounded-lg custom-input min-w-[120px]"&gt;&lt;option&gt;Tone: Any&lt;/option&gt;&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="beats-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;!-- Beats are dynamically loaded here by setupBeatListener() --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- 2. AI BEAT UPLOADER PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="uploader-page" class="main-page-section hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-extrabold text-white mb-6 border-b border-[var(--border-color)] pb-3"&gt;PRODUCER PORTAL&lt;/h2&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- V1 MANUAL UPLOAD --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 rounded-xl max-w-2xl mx-auto border border-[var(--border-color)] shadow-2xl bg-[#111]"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- PRODUCER SIGNUP FORM (FREE) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="producer-signup-form"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3"&gt;Become a Beatbay Producer&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-gray-400 mb-6"&gt;Join for **free**. List your beats and secure your 50% publishing automatically on every sale. No chasing, no disputes. Just clarity.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;form onsubmit="event.preventDefault(); handleProducerSignUp();"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="producerName" class="block text-sm font-medium text-gray-300 mb-1"&gt;Producer Name *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="producerName" placeholder="e.g. 'BeatGenius'" class="w-full p-3 mb-3 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="producerEmail" class="block text-sm font-medium text-gray-300 mb-1"&gt;Email *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="email" id="producerEmail" placeholder="you@example.com" class="w-full p-3 mb-6 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button type="submit" class="w-full p-4 bg-[var(--cta-blue)] text-white font-bold text-lg rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>Create Free Producer Account</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- PRODUCER UPLOADER TOOL (Hidden until signed in) - This is the old AI uploader, now unused. We keep the V1 version. --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="producer-uploader-tool" class="hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>&lt;!-- This is the old AI uploader, now unused. We keep the V1 version. --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- PRODUCER UPLOADER TOOL (V1 - MANUAL) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="producer-uploader-tool-v1" class="hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3"&gt;Manual Beat Uploader (V1)&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-gray-400 mb-6"&gt;Welcome, &lt;span id="producer-welcome-name" class="font-bold text-white"&gt;Producer&lt;/span&gt;! Fill out the form to list a new beat. All fields are required. Price is capped at £9.99.&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;form id="manual-upload-form" onsubmit="event.preventDefault(); handleManualBeatUpload();"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="beatTitle" class="block text-sm font-medium text-gray-300 mb-1"&gt;Beat Title *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="text" id="beatTitle" placeholder="e.g. 'Midnight Run'" class="w-full p-3 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="beatPrice" class="block text-sm font-medium text-gray-300 mb-1"&gt;Price (£) * (Max 9.99)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="number" id="beatPrice" step="0.01" max="9.99" placeholder="9.99" class="w-full p-3 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="beatGenre" class="block text-sm font-medium text-gray-300 mb-1"&gt;Genre *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="text" id="beatGenre" placeholder="e.g. 'Trap'" class="w-full p-3 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="beatBPM" class="block text-sm font-medium text-gray-300 mb-1"&gt;BPM *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="number" id="beatBPM" placeholder="140" class="w-full p-3 rounded-lg custom-input focus-ring" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="mp3File" class="block text-sm font-medium text-gray-300 mb-1"&gt;Preview MP3 File *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="file" id="mp3File" accept=".mp3" class="w-full p-3 text-white bg-gray-700 rounded-lg border-gray-600" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="stemsZip" class="block text-sm font-medium text-gray-300 mb-1"&gt;Stems/WAV ZIP File *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="file" id="stemsZip" accept=".zip" class="w-full p-3 text-white bg-gray-700 rounded-lg border-gray-600" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button type="submit" class="w-full mt-6 p-4 bg-red-600 text-white font-bold text-lg rounded-lg hover:bg-red-700 transition duration-200 shadow-md"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>LIST BEAT &amp; AGREE TO 50/50 SPLIT</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="upload-status" class="mt-4 text-center text-yellow-400 font-medium hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>Processing...</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- FOOTER --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;footer class="text-center py-8 mt-16 text-gray-500 border-t border-[var(--border-color)]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;&amp;copy; 2025 Beatbay. | Lifetime Fee Terms: Non-Exclusive License with mandatory 50/50 Publishing Split.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- LIVE CHAT WIDGET (Collapsible) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="live-chat" class="collapsed"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="chat-header" onclick="toggleChat()" class="p-3 text-center rounded-t-lg font-bold text-white flex justify-between items-center border-b border-[var(--border-color)] bg-[#111]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>GLOBAL LIVE CHAT</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg class="w-6 h-6 transform transition duration-300" id="chat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="chat-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="chat-window" class="flex flex-col-reverse flex-grow"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Messages load here --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="chat-input" placeholder="Type message and press Enter..." class="w-full p-2 rounded-lg custom-input focus-ring"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-<p class="p2"><br></p>
+<body class="p-4 md:p-8">
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, serverTimestamp, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        
+        // --- GLOBAL FIREBASE/AUTH SETUP ---
+        window.db = null;
+        window.auth = null;
+        window.storage = null; 
+        window.userId = null;
+        window.globalUserName = 'Anonymous';
+        window.isPaid = false; 
+        window.isProducer = false; 
+        
+        setLogLevel('Debug');
+
+        const appId = 'beatbay-1272b'; // Hardcoded from your config
+        
+        // Your web app's Firebase configuration (from your request)
+        const firebaseConfig = {
+          apiKey: "AIzaSyDi8U65b5gPQPLh-4rXovj8FCNkhdZm11k",
+          authDomain: "beatbay-1272b.firebaseapp.com",
+          projectId: "beatbay-1272b",
+          storageBucket: "beatbay-1272b.firebasestorage.app",
+          messagingSenderId: "665343591382",
+          appId: "1:665343591382:web:ca4776fb892a10c564da77",
+          measurementId: "G-331FTL8QJS"
+        };
+        // ---------------------------------------------
+        
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        if (firebaseConfig) {
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app); // Initialize Analytics
+                
+                // Set global instances
+                window.db = getFirestore(app);
+                window.auth = getAuth(app);
+                window.storage = getStorage(app); 
+
+                onAuthStateChanged(window.auth, async (user) => {
+                    try { 
+                        if (user) {
+                            window.userId = user.uid;
+                            window.globalUserName = user.displayName || `User_${window.userId.substring(0, 4)}`;
+                            
+                            // Check user's status (paid/producer) from Firestore
+                            try {
+                                const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
+                                const userDocSnap = await getDoc(userDocRef);
+                                
+                                if (userDocSnap.exists()) {
+                                    const userData = userDocSnap.data();
+                                    window.isPaid = userData.isPaid || false;
+                                    window.isProducer = userData.isProducer || false;
+                                    window.globalUserName = userData.displayName || window.globalUserName;
+                                } else {
+                                    // New user, create their doc (e.g., from anonymous sign-in)
+                                    await setDoc(userDocRef, {
+                                        uid: window.userId,
+                                        displayName: window.globalUserName,
+                                        email: user.email,
+                                        isPaid: false,
+                                        isProducer: false
+                                    });
+                                }
+                            } catch (firestoreError) {
+                                // Handle permission errors if rules aren't set up yet
+                                if (firestoreError.code === 'permission-denied' || firestoreError.message.includes('Missing or insufficient permissions')) {
+                                    console.warn(`Auth state: Permission denied while fetching user doc for ${window.userId}. This is normal if rules are not yet deployed. Running in limited mode.`);
+                                    window.isPaid = false;
+                                    window.isProducer = false;
+                                } else {
+                                    throw firestoreError;
+                                }
+                            }
+                            
+                            console.log(`Firebase: User signed in. ID: ${window.userId}, Name: ${window.globalUserName}, Paid: ${window.isPaid}, Producer: ${window.isProducer}`);
+
+                            // Initialize app components that depend on user auth
+                            setupLiveChat(appId, window.db);
+                            fetchTotalEarnings(appId, window.db);
+                            setupBeatListener(appId, window.db); 
+                            updateUIForUser();
+                            
+                        } else {
+                            // No user, sign in anonymously to allow browsing
+                            await signInAnonymously(window.auth);
+                            console.log("Firebase: Signed in anonymously.");
+                        }
+                    } catch (authError) { 
+                        console.error("Unhandled error during auth state change:", authError);
+                        // Fallback to simulated mode if auth setup fails
+                         document.getElementById('firebase-status').innerText = 'Status: Auth Error (Simulated)';
+                         window.userId = 'mock-user-123';
+                         window.globalUserName = 'MockUser';
+                         setupLiveChat(appId, null);
+                         fetchTotalEarnings(appId, null);
+                         updateUIForUser();
+                    }
+                });
+
+                // Handle custom token if provided (for sandbox environments)
+                if (initialAuthToken) {
+                    signInWithCustomToken(window.auth, initialAuthToken).catch(error => {
+                        console.error("Firebase Auth Error: Custom token sign-in failed.", error);
+                        signInAnonymously(window.auth);
+                    });
+                } else if (!window.auth.currentUser) {
+                     signInAnonymously(window.auth);
+                }
+
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                document.getElementById('firebase-status').innerText = 'Error: Firebase failed to initialize.';
+            }
+        } else {
+             console.error("Firebase config missing. Running in simulated mode.");
+             document.getElementById('firebase-status').innerText = 'Status: Offline (Simulated)';
+             window.userId = 'mock-user-123';
+             window.globalUserName = 'MockUser';
+             setupLiveChat(appId, null);
+             fetchTotalEarnings(appId, null);
+             updateUIForUser();
+        }
+
+        // --- CORE FUNCTIONS ---
+
+        // 1. EARNINGS COUNTER
+        function fetchTotalEarnings(appId, dbInstance) {
+            const earningsElement = document.getElementById('total-earnings');
+            const metricsDocPath = `/artifacts/${appId}/public/data/metrics/earnings`;
+            const mockEarnings = `£0.00`; // Start at 0
+
+            if (dbInstance) {
+                const docRef = doc(dbInstance, metricsDocPath);
+                onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const totalSales = docSnap.data().totalSales || 0;
+                        const producerShare = totalSales * 0.9; 
+                        earningsElement.textContent = `£${producerShare.toLocaleString('en-GB', { minimumFractionDigits: 2 })}`;
+                    } else {
+                         earningsElement.textContent = mockEarnings; 
+                    }
+                }, (error) => {
+                    // Gracefully handle permission errors by showing mock value
+                    if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {
+                        console.warn("Using mock earnings due to permission block. (This is normal if rules are not yet deployed)");
+                        earningsElement.textContent = mockEarnings;
+                    } else {
+                        console.error("Error fetching earnings:", error.message);
+                        earningsElement.textContent = mockEarnings; 
+                    }
+                });
+            } else {
+                earningsElement.textContent = mockEarnings;
+            }
+        }
+        
+        // 2. LIVE CHAT IMPLEMENTATION
+        function setupLiveChat(appId, dbInstance) {
+            const chatWindow = document.getElementById('chat-window');
+            const chatInput = document.getElementById('chat-input');
+            const chatCollectionPath = `/artifacts/${appId}/public/data/global_chat`;
+
+            // Lock chat input if not paid
+            if (!window.isPaid) {
+                chatInput.disabled = true;
+                chatInput.placeholder = "Purchase access to join the chat!";
+            } else {
+                chatInput.disabled = false;
+                chatInput.placeholder = "Type message and press Enter...";
+            }
+
+
+            if (dbInstance) {
+                // Query for messages, order by timestamp, and limit to last 50
+                const q = query(collection(dbInstance, chatCollectionPath), orderBy("timestamp", "desc"), limit(50)); 
+                
+                onSnapshot(q, (snapshot) => {
+                    const messages = [];
+                    snapshot.forEach(doc => messages.push(doc.data()));
+                    // Since we query 'desc', we reverse to show oldest-at-top, newest-at-bottom
+                    messages.reverse(); 
+                    
+                    chatWindow.innerHTML = ''; 
+                    messages.forEach((message) => { 
+                        displayMessage(chatWindow, message.userName, message.text, message.timestamp);
+                    });
+                    chatWindow.scrollTop = chatWindow.scrollHeight; 
+                }, (error) => {
+                    // Handle chat permission errors
+                    if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {
+                        console.warn("Permission denied fetching chat. (This is normal if rules are not yet deployed)");
+                        displayMessage(chatWindow, 'SYSTEM', 'Chat unavailable (permissions).', new Date());
+                    } else {
+                        console.error("Error fetching chat:", error);
+                    }
+                });
+
+                chatInput.addEventListener('keypress', async (e) => {
+                    if (e.key === 'Enter' && chatInput.value.trim() !== '' && window.isPaid) {
+                        e.preventDefault();
+                        const messageText = chatInput.value.trim();
+                        try {
+                            await addDoc(collection(dbInstance, chatCollectionPath), {
+                                userName: window.globalUserName,
+                                text: messageText,
+                                timestamp: serverTimestamp(),
+                                userId: window.userId
+                            });
+                            chatInput.value = '';
+                        } catch (error) {
+                            console.error("Error sending message:", error);
+                        }
+                    }
+                });
+            } else {
+                console.log("Running in Chat Mock Mode. Messages will not be persisted.");
+                displayMessage(chatWindow, 'SYSTEM', 'Chat is in mock mode.', new Date());
+            }
+        }
+
+        function displayMessage(chatWindow, userName, text, timestamp) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'chat-message';
+            const time = timestamp ? (timestamp.toDate ? timestamp.toDate().toLocaleTimeString() : new Date(timestamp).toLocaleTimeString()) : new Date().toLocaleTimeString();
+            messageElement.innerHTML = `<span class="chat-message-user">${userName || 'User'}</span>: <span>${text}</span>`;
+            chatWindow.appendChild(messageElement); 
+        }
+
+        window.postBeatComment = async function(beatId, commentInputId) {
+            if (!window.isPaid) {
+                window.showMembershipGate();
+                return;
+            }
+            // ... (Real comment logic would go here)
+            // e.g., addDoc(collection(db, `/artifacts/${appId}/public/data/beat_comments/${beatId}`), { ... })
+            alert('Comment posted (simulation)!');
+        }
+
+        // --- MARKETPLACE FUNCTIONS ---
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(`${tabName}-content`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            if (tabName === 'discover') {
+                const list = document.getElementById('beats-list');
+                if (list.innerHTML.trim() === '') {
+                     displayBeats(window.allBeats || []); // Display cached beats
+                }
+                document.getElementById('discover-title').textContent = `Algorithmic Discovery`;
+            }
+            if (tabName === 'trending') {
+                window.displayBeatsListPlaceholder();
+            }
+        }
+
+        window.displayBeatsListPlaceholder = function() {
+            document.getElementById('beats-list').innerHTML = `
+                <div class="col-span-full text-center p-8 text-gray-400">
+                     <p class="text-xl">Select a producer profile on the left to see their full catalog, or use the Discover tab.</p>
+                </div>
+            `;
+        }
+
+        window.viewProducerProfile = function(producerName) {
+            document.getElementById('tab-discover').click(); 
+            const filteredBeats = (window.allBeats || []).filter(b => b.producerName === producerName);
+            window.displayBeats(filteredBeats);
+            document.getElementById('discover-title').textContent = `Catalog for: ${producerName}`;
+        }
+        
+        // --- REAL BEAT LISTENER ---
+        window.allBeats = []; // Cache for beats
+        function setupBeatListener(appId, dbInstance) {
+            if (!dbInstance) return;
+            
+            const beatsCollectionPath = `/artifacts/${appId}/public/data/beats`;
+            const q = query(collection(dbInstance, beatsCollectionPath), limit(50));
+            
+            onSnapshot(q, (snapshot) => {
+                const beats = [];
+                snapshot.forEach(doc => beats.push({ id: doc.id, ...doc.data() }));
+                window.allBeats = beats; // Update cache
+                
+                if (document.getElementById('tab-discover').classList.contains('active')) {
+                    displayBeats(window.allBeats);
+                }
+            }, (error) => {
+                // Handle permission error
+                if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {
+                    console.warn("Permission denied fetching beats. (This is normal if rules are not yet deployed). Displaying empty list."); 
+                    displayBeats([]); 
+                } else {
+                    console.error("Error fetching beats:", error);
+                }
+            });
+        }
+        
+        window.displayBeats = function(beats) {
+            const list = document.getElementById('beats-list');
+            list.innerHTML = ''; 
+            
+            if (beats.length === 0) {
+                 list.innerHTML = `<div class="col-span-full text-center p-8 text-gray-400">No beats found. Producers, upload your beats!</div>`;
+                 return;
+            }
+
+            beats.forEach(beat => {
+                const beatCard = `
+                    <div class="beat-card p-4 rounded-xl shadow-lg relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xl font-bold text-white">${beat.title}</h4>
+                            <span class="text-3xl font-extrabold text-[var(--accent-blue)]">£${Number(beat.price).toFixed(2)}</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-2">Producer: <span class="font-semibold text-[var(--cta-blue)]">${beat.producerName}</span></p>
+
+                        <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4 border-t border-b border-[var(--border-color)] py-2">
+                            <span class="flex items-center">BPM: ${beat.bpm}</span>
+                            <span class="flex items-center">${beat.genre}</span>
+                            <span class="text-xs font-bold text-red-500">50/50 SPLIT</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                             <a href="${beat.mp3Url}" target="_blank" class="px-4 py-2 bg-[var(--accent-blue)] text-white rounded-lg flex items-center hover:bg-[#5a6be3] transition duration-200 shadow-md">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                Preview
+                            </a>
+                            <button onclick="window.handleBeatPurchase()" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
+                        </div>
+                        
+                        <!-- Comment Section -->
+                        <div class="mt-4 pt-4 border-t border-[var(--border-color)]">
+                            <h5 class="text-sm font-semibold text-white mb-2">Beat Comments:</h5>
+                            <div id="comments-list-${beat.id}" class="text-xs max-h-24 overflow-y-auto mb-2 p-1">
+                                <!-- Real comments would be loaded here -->
+                                <div class="text-sm mb-2 text-gray-400"><span class="font-bold text-blue-400">Mock User</span>: Dope track! (Mock)</div>
+                            </div>
+                            <input type="text" id="comment-input-${beat.id}" placeholder="Add a comment..." 
+                                class="w-full p-2 text-sm rounded-md custom-input focus-ring" 
+                                onkeypress="if(event.key === 'Enter') window.postBeatComment('${beat.id}', 'comment-input-${beat.id}');"
+                                ${!window.isPaid ? 'disabled' : ''}>
+                        </div>
+                    </div>
+                `;
+                list.innerHTML += beatCard;
+            });
+            
+            // Re-apply disabled state to inputs
+            if (!window.isPaid) {
+                document.querySelectorAll('.beat-card input').forEach(input => {
+                    input.disabled = true;
+                    input.placeholder = "Purchase access to comment.";
+                });
+            }
+        }
+        
+        // --- GATEKEEPING AND NAVIGATION FUNCTIONS ---
+
+        window.handleBeatPurchase = function() {
+            if (!window.isPaid) {
+                window.showMembershipGate();
+            } else {
+                // In a real app, this would trigger the Stripe purchase flow for the beat
+                // and then the split sheet generation.
+                alert('PURCHASE SUCCESSFUL! Your split sheet and files are being emailed now. (Simulation)');
+            }
+        }
+
+        // ARTIST PAYS - REAL AUTH
+        window.handleLifetimePurchase = async function() {
+            const userName = document.getElementById('accessName').value;
+            const email = document.getElementById('accessEmail').value;
+            const password = "password123"; // In a real app, you'd have a password field.
+            
+            if (!userName || !email) {
+                alert("Please enter a Full Name and Email before purchasing.");
+                return;
+            }
+            
+            // --- REAL PAYMENT LOGIC GOES HERE (e.g., call Stripe) ---
+            // For now, we skip Stripe and go straight to user creation
+            
+            try {
+                // Try to create a new user
+                const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);
+                await updateProfile(userCredential.user, { displayName: userName });
+                
+                window.userId = userCredential.user.uid;
+                window.globalUserName = userName;
+
+                // Update their Firestore doc with 'isPaid'
+                const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
+                await setDoc(userDocRef, {
+                    uid: window.userId,
+                    displayName: userName,
+                    email: email,
+                    isPaid: true,
+                    isProducer: false
+                }, { merge: true });
+
+                window.isPaid = true;
+                window.hideMembershipGate();
+                updateUIForUser();
+                alert(`WELCOME, ${userName}! Lifetime Access Granted. You can now buy, upload, and chat.`);
+
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    // User already exists, sign them in and update their status
+                    try {
+                        await signInWithEmailAndPassword(window.auth, email, password);
+                        // This assumes they *just* paid.
+                        const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.auth.currentUser.uid}`);
+                        await updateDoc(userDocRef, { isPaid: true }); // Grant access
+                        
+                        window.isPaid = true;
+                        window.hideMembershipGate();
+                        updateUIForUser();
+                        alert(`Welcome back, ${userName}! Access granted.`);
+                    } catch (signInError) {
+                        alert("Error: This email is in use. Please try logging in or use a different email.");
+                        console.error("Sign in error:", signInError);
+                    }
+                } else {
+                    console.error("Artist sign up error:", error);
+                    alert("Error creating account. Please try again.");
+                }
+            }
+        }
+        
+        // PRODUCER SIGNS UP (FREE) - REAL AUTH
+        window.handleProducerSignUp = async function() {
+            const producerName = document.getElementById('producerName').value;
+            const producerEmail = document.getElementById('producerEmail').value;
+            const password = "password123"; // Mock password, ensure it meets basic requirements
+            
+            if (!producerName || !producerEmail) {
+                alert("Please enter your Producer Name and Email to sign up.");
+                return;
+            }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(window.auth, producerEmail, password);
+                await updateProfile(userCredential.user, { displayName: producerName });
+                
+                window.userId = userCredential.user.uid;
+                window.globalUserName = producerName;
+
+                // Update their Firestore doc with 'isProducer'
+                const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
+                await setDoc(userDocRef, {
+                    uid: window.userId,
+                    displayName: producerName,
+                    email: producerEmail,
+                    isPaid: false, // Producers don't need to pay
+                    isProducer: true
+                }, { merge: true });
+
+                window.isProducer = true;
+                updateUIForUser();
+                
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    // User exists. Sign them in and grant producer status
+                    try {
+                        await signInWithEmailAndPassword(window.auth, producerEmail, password);
+                        const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.auth.currentUser.uid}`);
+                        await updateDoc(userDocRef, { isProducer: true, displayName: producerName });
+                        
+                        window.isProducer = true;
+                        updateUIForUser();
+                    } catch (signInError) {
+                        alert("Error: This email is in use. Please try logging in or use a different email.");
+                    }
+                } else {
+                    console.error("Producer sign up error:", error);
+                    alert("Error creating account. Please try again.");
+                }
+            }
+        }
+        
+        // --- V1 MANUAL BEAT UPLOAD (REAL) ---
+        window.handleManualBeatUpload = async function() {
+            const beatTitle = document.getElementById('beatTitle').value;
+            const beatGenre = document.getElementById('beatGenre').value;
+            const beatBPM = document.getElementById('beatBPM').value;
+            const beatPrice = document.getElementById('beatPrice').value;
+            const mp3File = document.getElementById('mp3File').files[0];
+            const stemsZip = document.getElementById('stemsZip').files[0];
+            const uploadStatus = document.getElementById('upload-status');
+
+            if (!beatTitle || !beatGenre || !beatBPM || !beatPrice || !mp3File || !stemsZip) {
+                alert("Please fill out all fields and upload both files.");
+                return;
+            }
+            
+            if (Number(beatPrice) > 9.99) {
+                alert("Price cannot be more than £9.99.");
+                return;
+            }
+            
+            if (!window.isProducer || !window.userId) {
+                alert("You must be signed in as a producer to upload.");
+                return;
+            }
+            
+            uploadStatus.classList.remove('hidden');
+            uploadStatus.textContent = 'Uploading files (this may take a moment)...';
+
+            try {
+                // 1. Upload MP3
+                const mp3StoragePath = `beats/${window.userId}/${beatTitle}_preview.mp3`;
+                const mp3Ref = ref(window.storage, mp3StoragePath);
+                await uploadBytes(mp3Ref, mp3File);
+                const mp3Url = await getDownloadURL(mp3Ref);
+
+                // 2. Upload Stems ZIP
+                const stemsStoragePath = `beats/${window.userId}/${beatTitle}_stems.zip`;
+                const stemsRef = ref(window.storage, stemsStoragePath);
+                await uploadBytes(stemsRef, stemsZip);
+                const stemsUrl = await getDownloadURL(stemsRef);
+
+                // 3. Write metadata to Firestore
+                uploadStatus.textContent = 'Writing to database...';
+                const beatsCollectionPath = `/artifacts/${appId}/public/data/beats`;
+                
+                await addDoc(collection(window.db, beatsCollectionPath), {
+                    title: beatTitle,
+                    genre: beatGenre,
+                    bpm: Number(beatBPM),
+                    price: Number(beatPrice),
+                    producerId: window.userId,
+                    producerName: window.globalUserName,
+                    mp3Url: mp3Url,
+                    stemsUrl: stemsUrl,
+                    createdAt: serverTimestamp(),
+                    sales: 0
+                });
+                
+                uploadStatus.textContent = `SUCCESS! "${beatTitle}" is now live on the marketplace.`;
+                document.getElementById('manual-upload-.form').reset();
+                
+                setTimeout(() => {
+                    uploadStatus.classList.add('hidden');
+                }, 4000);
+
+            } catch (error) {
+                console.error("Beat Upload Error:", error);
+                uploadStatus.textContent = `Error: ${error.message}`;
+            }
+        }
+
+
+        window.showMembershipGate = function() {
+            document.getElementById('membership-gate').classList.add('locked');
+        }
+
+        window.hideMembershipGate = function() {
+            document.getElementById('membership-gate').classList.remove('locked');
+        }
+        
+        // This function updates all UI elements based on auth state
+        window.updateUIForUser = function() {
+            // Update chat
+            const chatInput = document.getElementById('chat-input');
+            if (window.isPaid) {
+                chatInput.disabled = false;
+                chatInput.placeholder = "Type message and press Enter...";
+            } else {
+                chatInput.disabled = true;
+                chatInput.placeholder = "Purchase access to join the chat!";
+            }
+            
+            // Update comment inputs
+            document.querySelectorAll('.beat-card input').forEach(input => {
+                if(window.isPaid) {
+                    input.disabled = false;
+                    input.placeholder = "Add a comment...";
+                } else {
+                    input.disabled = true;
+                    input.placeholder = "Purchase access to comment.";
+                }
+            });
+            
+            // Update producer portal
+            if (window.isProducer) {
+                document.getElementById('producer-signup-form').classList.add('hidden');
+                document.getElementById('producer-uploader-tool-v1').classList.remove('hidden'); 
+                document.getElementById('producer-welcome-name').textContent = window.globalUserName;
+            } else {
+                document.getElementById('producer-signup-form').classList.remove('hidden');
+                document.getElementById('producer-uploader-tool-v1').classList.add('hidden'); 
+            }
+        }
+
+        // --- NAVIGATION LOGIC ---
+        window.navigate = function(pageId) {
+            document.querySelectorAll('.main-page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.classList.remove('hidden');
+            } else {
+                console.warn(`Navigation failed: Page with ID '${pageId}' not found. Defaulting to landing.`);
+                document.getElementById('landing-page').classList.remove('hidden');
+                window.location.hash = '#landing';
+                return;
+            }
+            
+            window.location.hash = '#' + pageId.replace('-page', '');
+
+            if (pageId === 'marketplace-page') {
+                window.switchTab('trending');
+            }
+        }
+
+        // --- CHAT COLLAPSE LOGIC ---
+        window.toggleChat = function() {
+            document.getElementById('live-chat').classList.toggle('collapsed');
+        }
+        
+        window.onload = function() {
+            // Handle URL navigation or default to landing page
+            const initialHash = window.location.hash.substring(1);
+            let targetPage = 'landing-page'; // Default
+            if (initialHash === 'marketplace') {
+                targetPage = 'marketplace-page';
+            } else if (initialHash === 'uploader') {
+                targetPage = 'uploader-page';
+            }
+            window.navigate(targetPage);
+            
+            // Re-check UI state on load
+            updateUIForUser();
+        }
+        
+        window.onhashchange = function() {
+            const currentHash = window.location.hash.substring(1);
+            let targetPage = 'landing-page'; // Default
+            if (currentHash === 'marketplace') {
+                targetPage = 'marketplace-page';
+            } else if (currentHash === 'uploader') {
+                targetPage = 'uploader-page';
+            }
+            window.navigate(targetPage);
+        }
+    </script>
+    
+    <div id="firebase-status" class="fixed top-2 left-2 text-xs text-yellow-500 z-50"></div>
+
+    <main class="container mx-auto relative min-h-[1200px]">
+        
+        <!-- MEMBERSHIP GATE MODAL (Styled after the "Unlock Your Lifetime Access" reference) -->
+        <div id="membership-gate" class="p-4">
+            <div class="gate-content">
+                <h3 id="gate-headline-primary" class="text-3xl md:text-4xl font-extrabold text-white mb-2 text-center">UNLOCK YOUR <span class="text-[var(--accent-blue)]">LIFETIME ACCESS</span></h3>
+                <p id="gate-subtitle" class="text-lg text-gray-400 mb-6 text-center">Join hundreds of artists already creating with legal clarity.</p>
+                
+                <div class="p-6 bg-[#111] rounded-lg border border-[var(--border-color)]">
+                    <p id="gate-form-title" class="text-sm font-semibold text-gray-300 mb-4">Artist Registration | One-time payment of <span class="text-white font-bold">£39.99</span></p>
+                    <form onsubmit="event.preventDefault(); window.handleLifetimePurchase();">
+                        <label for="accessName" class="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
+                        <input type="text" id="accessName" placeholder="John Doe" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required>
+                        
+                        <label for="accessEmail" class="block text-sm font-medium text-gray-300 mb-1">Email Address *</label>
+                        <input type="email" id="accessEmail" placeholder="john@example.com" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required>
+                        
+                        <label for="accessPRO" class="block text-sm font-medium text-gray-300 mb-1">PRO/IPI Number (Optional)</label>
+                        <input type="text" id="accessPRO" placeholder="e.g., 00123456789 (ASCAP, BMI, etc)" class="w-full p-3 mb-6 rounded-md custom-input focus-ring">
+
+                        <p class="text-xs text-gray-500 mb-4">By submitting, you agree to the mandatory 50/50 publishing split terms. You will receive automatic split sheets for all beat purchases.</p>
+                        
+                        <button id="gate-submit-btn" type="submit" class="w-full p-4 bg-[var(--cta-blue)] text-white font-extrabold text-xl rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-lg">
+                            PAY £39.99 AND ENTER THE VAULT
+                        </button>
+                    </form>
+                </div>
+                <button onclick="window.hideMembershipGate()" class="mt-4 text-gray-500 hover:text-white text-sm w-full text-center">Cancel</button>
+            </div>
+        </div>
+        <!-- END MEMBERSHIP GATE -->
+
+
+        <!-- HEADER & NAVIGATION -->
+        <header id="header-section" class="text-center py-4">
+            <div class="container mx-auto">
+                <div class="flex justify-between items-center">
+                    <a href="#landing" onclick="window.navigate('landing-page')" class="logo">BEATBAY</a>
+                    <div class="space-x-4">
+                        <button onclick="window.navigate('marketplace-page')" class="nav-button nav-button-secondary">Marketplace</button>
+                        <button onclick="window.navigate('uploader-page')" class="nav-button nav-button-primary">Producer Portal</button>
+                    </div>
+                </div>
+                <!-- EARNINGS COUNTER (Moved here) -->
+                <div class="mt-6 p-4 bg-gray-900 border border-[var(--border-color)] rounded-lg max-w-sm mx-auto shadow-xl text-center">
+                    <h3 class="text-lg font-semibold text-gray-300">Total Producer Earnings</h3>
+                    <p id="total-earnings" class="text-4xl font-extrabold text-[var(--accent-blue)] mt-1">
+                        Loading...
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">This figure updates in real-time from sales data.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 0. LANDING PAGE (NEW) - Based on reference 21.53.35.png -->
+        <section id="landing-page" class="main-page-section">
+            <div class="text-center py-16">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white">The <span class="text-[var(--accent-blue)]">Legal Problem</span>. Solved.</h1>
+                <p class="text-xl text-gray-400 mt-4 max-w-3xl mx-auto">Music publishing is complex. Splits cause disputes. We automate the entire process to ensure you get paid, fairly and automatically.</p>
+            </div>
+
+            <!-- Feature Grid (from reference) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-12">
+                <div class="feature-card">
+                    <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0L15 15.182M12 6a2.25 2.25 0 0 0-2.25 2.25v1.5a2.25 2.25 0 0 0 2.25 2.25m0-3.75a2.25 2.25 0 0 1 2.25 2.25v1.5a2.25 2.25 0 0 1-2.25 2.25M12 6v12" /></svg></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Lifetime Access. Zero Subscriptions.</h3>
+                        <p class="text-gray-400">Pay once. Access forever. No monthly fees, no hidden costs. Just £39.99 for unlimited marketplace access.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-12 6v4.75A2.25 2.25 0 0 1 6.75 18H3.75m8.25-13.5H21M3.75 9v.75c0 .414.336.75.75.75h.75m0 0v-.75c0-.414-.336.75-.75-.75h-.75M15 4.5v.75A.75.75 0 0 1 14.25 6h-.75m0 0v-.75A.75.75 0 0 1 14.25 4.5h.75M15 9v.75c0 .414.336.75.75.75h.75m0 0v-.75c0-.414-.336.75-.75-.75h-.75" /></svg></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Every Beat Under £9.99. Guaranteed.</h3>
+                        <p class="text-gray-400">No expensive lease tiers. Every beat, every stem pack is capped at £9.99. Professional quality, fair pricing.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Automatic Publishing Rights Protection</h3>
+                        <p class="text-gray-400">The 50/50 Split. Every purchase auto-generates a legally binding split sheet. You get 50% publishing as the artist. The producer keeps 50%. No negotiations, no disputes. Just clarity.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9m-8 10.5a9 9 0 1 1 18 0a9 9 0 0 1-18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Instant Stems & Files</h3>
+                        <p class="text-gray-400">Download high-quality stems, WAVs, and MP3s instantly. Full creative control. Professional-grade files ready for your DAW.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How it Works (from reference) -->
+            <div class="how-it-works-card max-w-4xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-white text-center mb-6">How It Works</h2>
+                <p class="text-lg text-gray-400 mb-6 text-center">When you purchase a beat for £9.99, our system **instantly generates** a mandatory publishing split sheet (PDF). This document clearly states:</p>
+                <ul class="space-y-4 text-lg text-gray-300">
+                    <li class="flex"><span class="text-green-400 mr-3">✔</span> **50% composition publishing** to the producer (as composer).</li>
+                    <li class="flex"><span class="text-green-400 mr-3">✔</span> **50% composition publishing** to you (as topliner/songwriter).</li>
+                    <li class="flex"><span class="text-green-400 mr-3">✔</span> Non-exclusive licensing for the master recording.</li>
+                </ul>
+                <p class="text-sm text-gray-500 mt-6">Both parties receive this document via email immediately after purchase. This ensures compliance with PROs (PRS, ASCAP, BMI) and prepares you for future label deals.</p>
+            </div>
+            
+        </section>
+
+        <!-- 1. MARKETPLACE PAGE -->
+        <section id="marketplace-page" class="main-page-section hidden">
+            <!-- TAB NAVIGATION -->
+            <div class="flex border-b border-[var(--border-color)] mb-6">
+                <button id="tab-trending" class="tab-button active" onclick="window.switchTab('trending')">
+                    🔥 Trending Producers (Scoreboard)
+                </button>
+                <button id="tab-discover" class="tab-button" onclick="window.switchTab('discover')">
+                    🎵 Discover Beats (Filters)
+                </button>
+            </div>
+            
+            <!-- TAB CONTENT CONTAINER -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <!-- LEFT COLUMN: TRENDING SCOREBOARD -->
+                <div id="trending-content" class="tab-content col-span-1 w-full">
+                    <h4 class="text-xl font-bold text-white mb-3">Top Producers (All-Time Sales)</h4>
+                    
+                    <div class="scoreboard-card p-4 space-y-3 w-full">
+                        <!-- Mock Data, real data would come from Firestore -->
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('DJ Shadow-box')">
+                            <span>#1 DJ Shadow-box</span>
+                            <span class="text-[var(--accent-blue)] font-extrabold">£12k</span>
+                        </div>
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('Lofi_Llama')">
+                            <span>#2 Lofi_Llama</span>
+                            <span class="text-[var(--accent-blue)] font-extrabold">£8.5k</span>
+                        </div>
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('SynthGod')">
+                            <span>#3 SynthGod</span>
+                            <span class="text-[var(--accent-blue)] font-extrabold">£6.1k</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: DISCOVER BEATS -->
+                <div id="discover-content" class="tab-content hidden lg:col-span-3">
+                    <h4 id="discover-title" class="text-xl font-bold text-white mb-4">Algorithmic Discovery</h4>
+                    
+                    <div class="flex flex-wrap gap-4 mb-6 p-4 rounded-lg border border-[var(--border-color)] bg-[#111]">
+                        <input type="text" placeholder="Search by title, tags, or mood..." class="flex-grow p-2 rounded-lg custom-input focus-ring min-w-[200px]">
+                        <select class="p-2 rounded-lg custom-input min-w-[120px]"><option>Genre: All</option></select>
+                        <select class="p-2 rounded-lg custom-input min-w-[120px]"><option>BPM: Any</option></select>
+                        <select class="p-2 rounded-lg custom-input min-w-[120px]"><option>Tone: Any</option></select>
+                    </div>
+
+                    <div id="beats-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Beats are dynamically loaded here by setupBeatListener() -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. PRODUCER UPLOADER PAGE -->
+        <section id="uploader-page" class="main-page-section hidden">
+            <h2 class="text-4xl font-extrabold text-white mb-6 border-b border-[var(--border-color)] pb-3">PRODUCER PORTAL</h2>
+            
+            <!-- V1 MANUAL UPLOAD -->
+            <div class="p-8 rounded-xl max-w-2xl mx-auto border border-[var(--border-color)] shadow-2xl bg-[#111]">
+                
+                <!-- PRODUCER SIGNUP FORM (FREE) -->
+                <div id="producer-signup-form">
+                    <h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3">Become a Beatbay Producer</h3>
+                    <p class="text-gray-400 mb-6">Join for **free**. List your beats and secure your 50% publishing automatically on every sale. No chasing, no disputes. Just clarity.</p>
+                    <form onsubmit="event.preventDefault(); window.handleProducerSignUp();">
+                        <label for="producerName" class="block text-sm font-medium text-gray-300 mb-1">Producer Name *</label>
+                        <input type="text" id="producerName" placeholder="e.g. 'BeatGenius'" class="w-full p-3 mb-3 rounded-lg custom-input focus-ring" required>
+                        <label for="producerEmail" class="block text-sm font-medium text-gray-300 mb-1">Email *</label>
+                        <input type="email" id="producerEmail" placeholder="you@example.com" class="w-full p-3 mb-6 rounded-lg custom-input focus-ring" required>
+                        <button type="submit" class="w-full p-4 bg-[var(--cta-blue)] text-white font-bold text-lg rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md">
+                            Create Free Producer Account
+                        </button>
+                    </form>
+                </div>
+
+                <!-- PRODUCER UPLOADER TOOL (V1 - MANUAL) -->
+                <div id="producer-uploader-tool-v1" class="hidden">
+                    <h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3">Manual Beat Uploader (V1)</h3>
+                    <p class="text-gray-400 mb-6">Welcome, <span id="producer-welcome-name" class="font-bold text-white">Producer</span>! Fill out the form to list a new beat. All fields are required. Price is capped at £9.99.</p>
+                    
+                    <form id="manual-upload-form" onsubmit="event.preventDefault(); window.handleManualBeatUpload();">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="beatTitle" class="block text-sm font-medium text-gray-300 mb-1">Beat Title *</label>
+                                <input type="text" id="beatTitle" placeholder="e.g. 'Midnight Run'" class="w-full p-3 rounded-lg custom-input focus-ring" required>
+                            </div>
+                            <div>
+                                <label for="beatPrice" class="block text-sm font-medium text-gray-300 mb-1">Price (£) * (Max 9.99)</label>
+                                <input type="number" id="beatPrice" step="0.01" max="9.99" placeholder="9.99" class="w-full p-3 rounded-lg custom-input focus-ring" required>
+                            </div>
+                            <div>
+                                <label for="beatGenre" class="block text-sm font-medium text-gray-300 mb-1">Genre *</label>
+                                <input type="text" id="beatGenre" placeholder="e.g. 'Trap'" class="w-full p-3 rounded-lg custom-input focus-ring" required>
+                            </div>
+                            <div>
+                                <label for="beatBPM" class="block text-sm font-medium text-gray-300 mb-1">BPM *</label>
+                                <input type="number" id="beatBPM" placeholder="140" class="w-full p-3 rounded-lg custom-input focus-ring" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="mp3File" class="block text-sm font-medium text-gray-300 mb-1">Preview MP3 File *</label>
+                            <input type="file" id="mp3File" accept=".mp3" class="w-full p-3 text-white bg-gray-700 rounded-lg border-gray-600" required>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label for="stemsZip" class="block text-sm font-medium text-gray-300 mb-1">Stems/WAV ZIP File *</label>
+                            <input type="file" id="stemsZip" accept=".zip" class="w-full p-3 text-white bg-gray-700 rounded-lg border-gray-600" required>
+                        </div>
+
+                        <button type="submit" class="w-full mt-6 p-4 bg-red-600 text-white font-bold text-lg rounded-lg hover:bg-red-700 transition duration-200 shadow-md">
+                            LIST BEAT & AGREE TO 50/50 SPLIT
+                        </button>
+                    </form>
+                </div>
+
+                <div id="upload-status" class="mt-4 text-center text-yellow-400 font-medium hidden">
+                    Processing...
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-8 mt-16 text-gray-500 border-t border-[var(--border-color)]">
+            <p>&copy; 2025 Beatbay. | Lifetime Fee Terms: Non-Exclusive License with mandatory 50/50 Publishing Split.</p>
+        </footer>
+    </main>
+
+    <!-- LIVE CHAT WIDGET (Collapsible) -->
+    <div id="live-chat" class="collapsed">
+        <div id="chat-header" onclick="window.toggleChat()" class="p-3 text-center rounded-t-lg font-bold text-white flex justify-between items-center border-b border-[var(--border-color)] bg-[#111]">
+            GLOBAL LIVE CHAT
+            <svg class="w-6 h-6 transform transition duration-300" id="chat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+        </div>
+        <div id="chat-content">
+            <div id="chat-window" class="flex flex-col-reverse flex-grow">
+                <!-- Messages load here -->
+            </div>
+            <div class="p-3">
+                <input type="text" id="chat-input" placeholder="Type message and press Enter..." class="w-full p-2 rounded-lg custom-input focus-ring">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
