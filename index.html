@@ -249,11 +249,11 @@
         const appId = 'beatbay-final'; 
         
         // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
-        // REPLACE THIS OBJECT WITH YOUR LIVE KEYS IF YOU SWITCHED PROJECTS
+        // This is the configuration from your personal account.
         const firebaseConfig = {
             apiKey: "AIzaSyAFRugvGYOVn44SPB9p1eovIEus-OBdS0Q",
             authDomain: "beatbay-personal.firebaseapp.com",
-            projectId: "beatbay-final", // Using the correct final ID
+            projectId: "beatbay-final", 
             storageBucket: "beatbay-personal.appspot.com",
             messagingSenderId: "383555908497",
             appId: "1:383555908497:web:ebd0f240d5551d09a7e030",
@@ -405,7 +405,7 @@
                 
                 onSnapshot(q, (snapshot) => {
                     const messages = [];
-                    snapshot.forEach(doc => messages.push(doc.data()));
+                    snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
                     messages.sort((a, b) => (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0));
                     
                     chatWindow.innerHTML = ''; 
