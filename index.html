@@ -249,7 +249,6 @@
         const appId = 'beatbay-final'; 
         
         // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
-        // This is the configuration from your personal account.
         const firebaseConfig = {
             apiKey: "AIzaSyAFRugvGYOVn44SPB9p1eovIEus-OBdS0Q",
             authDomain: "beatbay-personal.firebaseapp.com",
@@ -546,7 +545,8 @@
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
                                 Preview
                             </button>
-                            <button onclick="handleBeatPurchase()" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
+                            <!-- THIS IS THE NEWLY WIRED-UP BUTTON -->
+                            <button onclick="handleBeatPurchase('${beat.id}', event)" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
                         </div>
                         
                         <!-- Comment Section -->
@@ -575,11 +575,42 @@
         
         // --- GATEKEEPING AND NAVIGATION FUNCTIONS ---
 
-        window.handleBeatPurchase = function() {
+        // THIS FUNCTION IS NOW A SIMULATION. IT WILL BE REPLACED BY A CLOUD FUNCTION.
+        window.handleBeatPurchase = async function(beatId, event) {
             if (!window.isPaid) {
                 window.showMembershipGate();
-            } else {
-                alert('PURCHASE SUCCESSFUL! Your split sheet and files are being emailed now.');
+                return;
+            }
+
+            const buyButton = event.target;
+            buyButton.disabled = true;
+            buyButton.textContent = 'Processing...';
+
+            try {
+                // 1. Call the new cloud function
+                const processSale = httpsCallable(window.functions, 'processBeatSale');
+                
+                // 2. Pass the beatId and artist info
+                const result = await processSale({ 
+                    beatId: beatId,
+                    artistEmail: window.auth.currentUser.email, 
+                    artistName: window.globalUserName
+                });
+
+                // 3. Handle success
+                if (result.data.success) {
+                    alert('SALE COMPLETE! Check your email for the files and the legal 50/50 Split Sheet.');
+                } else {
+                    throw new Error(result.data.error || 'Unknown error');
+                }
+
+            } catch (error) {
+                console.error("Error processing beat sale:", error);
+                alert(`Error: ${error.message}. Please try again.`);
+            } finally {
+                // 4. Reset button
+                buyButton.disabled = false;
+                buyButton.textContent = 'BUY & SPLIT';
             }
         }
 
@@ -858,7 +889,7 @@
                 <p id="gate-subtitle" class="text-lg text-gray-400 mb-6 text-center">Join hundreds of artists already creating with legal clarity.</p>
                 
                 <div class="p-6 bg-[#111] rounded-lg border border-[var(--border-color)]">
-                    <p id="gate-form-title" class="text-sm font-semibold text-gray-300 mb-4">Artist Registration | One-time payment of <span class="text-white font-bold">£29.99</span></p>
+                    <p id="gate-form-title" class="text-sm font-semibold text-gray-300 mb-4">Artist Registration | One-time payment of <span class="text-white font-bold">£29.99</span></Vercel>
                     <form onsubmit="event.preventDefault(); handleLifetimePurchase();">
                         <label for="accessName" class="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
                         <input type="text" id="accessName" placeholder="John Doe" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required>
