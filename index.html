@@ -227,7 +227,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
@@ -245,20 +245,17 @@
         
         setLogLevel('Debug');
 
-        // IMPORTANT: Set the Project ID here
         const appId = 'beatbay-final'; 
         
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-          apiKey: "AIzaSyCUUNgUyM45VSkSeZciutusrEx_ao1SCr0",
-          authDomain: "beatbay-final.firebaseapp.com",
-          projectId: "beatbay-final",
-          storageBucket: "beatbay-final.firebasestorage.app",
-          messagingSenderId: "482423034883",
-          appId: "1:482423034883:web:1b89ac38840a6c80ab2a36",
-          measurementId: "G-KSZJTS7C9G"
+            apiKey: "AIzaSyAFRugvGYOVn44SPB9p1eovIEus-OBdS0Q",
+            authDomain: "beatbay-personal.firebaseapp.com",
+            projectId: "beatbay-final", 
+            storageBucket: "beatbay-personal.appspot.com",
+            messagingSenderId: "383555908497",
+            appId: "1:383555908497:web:ebd0f240d5551d09a7e030",
+            measurementId: "G-2XDMSERGBK"
         };
-        // ---------------------------------------------
         
         if (firebaseConfig) {
             try {
@@ -266,15 +263,16 @@
                 window.db = getFirestore(app);
                 window.auth = getAuth(app);
                 window.storage = getStorage(app); 
-                window.functions = getFunctions(app, 'us-central1'); // Initialize Functions
+                window.functions = getFunctions(app, 'us-central1'); 
                 
+                // onAuthStateChanged IS THE SINGLE SOURCE OF TRUTH
                 onAuthStateChanged(window.auth, async (user) => {
                     try { 
                         if (user) {
                             window.userId = user.uid;
                             window.globalUserName = user.displayName || `User_${window.userId.substring(0, 4)}`;
                             
-                            // --- REAL AUTH CHECK ---
+                            // Check user's status (paid/producer) from Firestore
                             try {
                                 const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
                                 const userDocSnap = await getDoc(userDocRef);
@@ -310,12 +308,22 @@
                             setupLiveChat(appId, window.db);
                             fetchTotalEarnings(appId, window.db);
                             setupBeatListener(appId, window.db); 
-                            updateUIForUser();
                             
                         } else {
+                            // User is signed out or anonymous
                             await signInAnonymously(window.auth);
                             console.log("Firebase: Signed in anonymously.");
+                            
+                            // Reset state for guest
+                            window.userId = null;
+                            window.globalUserName = 'Anonymous';
+                            window.isPaid = false;
+                            window.isProducer = false;
                         }
+
+                        // This MUST be called *after* auth state is confirmed
+                        updateUIForUser();
+
                     } catch (authError) { 
                         console.error("Unhandled error during auth state change:", authError);
                          document.getElementById('firebase-status').innerText = 'Status: Auth Error (Simulated)';
@@ -334,7 +342,7 @@
         } else {
              console.error("Firebase config missing. Running in simulated mode.");
              document.getElementById('firebase-status').innerText = 'Status: Offline (Simulated)';
-             window.userId = 'mock-user-123';
+             window.userId = 'mock-user-1D23';
              window.globalUserName = 'MockUser';
              setupLiveChat(appId, null);
              fetchTotalEarnings(appId, null);
@@ -378,15 +386,6 @@
             const chatWindow = document.getElementById('chat-window');
             const chatInput = document.getElementById('chat-input');
             const chatCollectionPath = `/artifacts/${appId}/public/data/global_chat`;
-
-            if (!window.isPaid) {
-                chatInput.disabled = true;
-                chatInput.placeholder = "Purchase access to join the chat!";
-            } else {
-                chatInput.disabled = false;
-                chatInput.placeholder = "Type message and press Enter...";
-            }
-
 
             if (dbInstance) {
                 const q = query(collection(dbInstance, chatCollectionPath), limit(50)); 
@@ -535,7 +534,7 @@
                                 Preview
                             </button>
                             <!-- THIS IS THE NEWLY WIRED-UP BUTTON -->
-                            <button onclick="handleBeatPurchase('${beat.id}', event)" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
+                            <button onclick="window.handleBeatPurchase('${beat.id}', event)" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
                         </div>
                         
                         <!-- Comment Section -->
@@ -546,7 +545,7 @@
                             </div>
                             <input type="text" id="comment-input-${beat.id}" placeholder="Add a comment..." 
                                 class="w-full p-2 text-sm rounded-md custom-input focus-ring" 
-                                onkeypress="if(event.key === 'Enter') postBeatComment('${beat.id}', 'comment-input-${beat.id}');"
+                                onkeypress="if(event.key === 'Enter') window.postBeatComment('${beat.id}', 'comment-input-${beat.id}');"
                                 ${!window.isPaid ? 'disabled' : ''}>
                         </div>
                     </div>
@@ -564,14 +563,13 @@
         
         // --- GATEKEEPING AND NAVIGATION FUNCTIONS ---
 
-        // THIS FUNCTION IS NOW A SIMULATION. IT WILL BE REPLACED BY A CLOUD FUNCTION.
         window.handleBeatPurchase = async function(beatId, event) {
             if (!window.isPaid) {
                 window.showMembershipGate();
                 return;
             }
 
-            const buyButton = event.target;
+            const buyButton = event.target.closest('button'); // Get the button element
             buyButton.disabled = true;
             buyButton.textContent = 'Processing...';
 
@@ -615,8 +613,6 @@
                 return;
             }
             
-            // 1. Authenticate or Create User (pre-Stripe)
-            let userCreated = false;
             let currentUserId = window.userId;
 
             if (!currentUserId || window.auth.currentUser.isAnonymous) {
@@ -624,7 +620,6 @@
                     const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);
                     await updateProfile(userCredential.user, { displayName: userName });
                     currentUserId = userCredential.user.uid;
-                    userCreated = true;
                 } catch (error) {
                     if (error.code === 'auth/email-already-in-use') {
                          try {
@@ -676,7 +671,6 @@
                 return;
             }
             
-            // Authentication Logic
             let user;
             try {
                 const userCredential = await createUserWithEmailAndPassword(window.auth, producerEmail, password);
@@ -699,20 +693,18 @@
             }
             
             // Set Producer Flag in Firestore
-            window.userId = user.uid;
-            window.globalUserName = producerName;
-            const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
+            // This write triggers onAuthStateChanged, which will update the UI
+            const userDocRef = doc(window.db, `/artifacts/${appId}/users/${user.uid}`);
             await setDoc(userDocRef, {
-                uid: window.userId,
+                uid: user.uid,
                 displayName: producerName,
                 email: producerEmail,
                 isPaid: false, 
                 isProducer: true
             }, { merge: true });
 
-            window.isProducer = true;
-            updateUIForUser();
             alert(`Welcome, ${producerName}! You can now upload beats.`);
+            // No manual UI update here. onAuthStateChanged will handle it.
         }
         
         // V1 MANUAL BEAT UPLOAD (REAL)
@@ -795,7 +787,28 @@
             document.getElementById('membership-gate').classList.remove('locked');
         }
         
+        // NEW: Handle user sign-out
+        window.handleSignOut = function() {
+            signOut(window.auth).then(() => {
+                console.log('User signed out.');
+                // onAuthStateChanged will handle the rest
+            }).catch((error) => {
+                console.error("Sign out error:", error);
+            });
+        }
+        
         window.updateUIForUser = function() {
+            // NEW: Profile UI in Header
+            const profileElement = document.getElementById('user-profile');
+            if (window.userId && !window.auth.currentUser.isAnonymous) {
+                profileElement.innerHTML = `
+                    <span class="text-gray-300">Welcome, ${window.globalUserName}</span>
+                    <button onclick="handleSignOut()" class="ml-4 text-red-400 hover:text-red-300">Sign Out</button>
+                `;
+            } else {
+                profileElement.innerHTML = `<span class="text-gray-500">Browsing as Guest</span>`;
+            }
+
             // Re-apply disabled/enabled states based on current user flags
             const chatInput = document.getElementById('chat-input');
             if (window.isPaid) {
@@ -850,7 +863,7 @@
             }
             window.navigate(targetPage);
             
-            updateUIForUser();
+            // updateUIForUser() is now called by onAuthStateChanged
         }
         
         window.onhashchange = function() {
@@ -907,6 +920,10 @@
             <div class="container mx-auto">
                 <div class="flex justify-between items-center">
                     <a href="#landing" onclick="navigate('landing-page')" class="logo">BEATBAY</a>
+                    <!-- NEW: PROFILE/LOGIN UI -->
+                    <div id="user-profile" class="text-sm font-medium">
+                        <!-- This will be populated by updateUIForUser() -->
+                    </div>
                     <div class="space-x-4">
                         <button onclick="navigate('marketplace-page')" class="nav-button nav-button-secondary">Marketplace</button>
                         <button onclick="navigate('uploader-page')" class="nav-button nav-button-primary">Producer Portal</button>
