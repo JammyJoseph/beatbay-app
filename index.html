@@ -227,8 +227,8 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, serverTimestamp, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-functions.js";
@@ -260,8 +260,6 @@
         };
         // ---------------------------------------------
         
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
         if (firebaseConfig) {
             try {
                 const app = initializeApp(firebaseConfig);
@@ -329,15 +327,6 @@
                     }
                 });
 
-                if (initialAuthToken) {
-                    signInWithCustomToken(window.auth, initialAuthToken).catch(error => {
-                        console.error("Firebase Auth Error: Custom token sign-in failed.", error);
-                        signInAnonymously(window.auth);
-                    });
-                } else if (!window.auth.currentUser) {
-                     signInAnonymously(window.auth);
-                }
-
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
                 document.getElementById('firebase-status').innerText = 'Error: Firebase failed to initialize.';
@@ -358,7 +347,7 @@
         function fetchTotalEarnings(appId, dbInstance) {
             const earningsElement = document.getElementById('total-earnings');
             const metricsDocPath = `/artifacts/${appId}/public/data/metrics/earnings`;
-            const mockEarnings = `£75,450.50`; 
+            const mockEarnings = `£0.00`; 
 
             if (dbInstance) {
                 const docRef = doc(dbInstance, metricsDocPath);
@@ -1016,7 +1005,7 @@
                             <span>#2 Lofi_Llama</span>
                             <span class="text-[var(--accent-blue)] font-extrabold">£8.5k</span>
                         </div>
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('SynthGod')">
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-110 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('SynthGod')">
                             <span>#3 SynthGod</span>
                             <span class="text-[var(--accent-blue)] font-extrabold">£6.1k</span>
                         </div>
