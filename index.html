@@ -228,7 +228,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-functions.js";
@@ -245,10 +245,10 @@
         
         setLogLevel('Debug');
 
-        // IMPORTANT: Set the Project ID here
         const appId = 'beatbay-final'; 
         
         // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
+        // This is the CORRECT configuration from your personal account.
         const firebaseConfig = {
           apiKey: "AIzaSyCUUNgUyM45VSkSeZciutusrEx_ao1SCr0",
           authDomain: "beatbay-final.firebaseapp.com",
@@ -305,11 +305,6 @@
                             }
                             
                             console.log(`Firebase: User signed in. ID: ${window.userId}, Name: ${window.globalUserName}, Paid: ${window.isPaid}, Producer: ${window.isProducer}`);
-
-                            // Initialize app components
-                            setupLiveChat(appId, window.db);
-                            fetchTotalEarnings(appId, window.db);
-                            setupBeatListener(appId, window.db); 
                             
                         } else {
                             // User is signed out or anonymous
@@ -324,31 +319,44 @@
                         }
 
                         // This MUST be called *after* auth state is confirmed
-                        updateUIForUser();
+                        // This initializes all UI components and listeners
+                        initializeAppUI(appId, window.db);
 
                     } catch (authError) { 
                         console.error("Unhandled error during auth state change:", authError);
-                         document.getElementById('firebase-status').innerText = 'Status: Auth Error (Simulated)';
-                         window.userId = 'mock-user-123';
-                         window.globalUserName = 'MockUser';
-                         setupLiveChat(appId, null);
-                         fetchTotalEarnings(appId, null);
-                         updateUIForUser();
+                         initializeAppUI(appId, null); // Init UI in a fallback state
                     }
                 });
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
                 document.getElementById('firebase-status').innerText = 'Error: Firebase failed to initialize.';
+                initializeAppUI(appId, null); // Init UI in a fallback state
             }
         } else {
              console.error("Firebase config missing. Running in simulated mode.");
-             document.getElementById('firebase-status').innerText = 'Status: Offline (Simulated)';
-             window.userId = 'mock-user-1D23';
-             window.globalUserName = 'MockUser';
-             setupLiveChat(appId, null);
-             fetchTotalEarnings(appId, null);
-             updateUIForUser();
+             initializeAppUI(appId, null); // Init UI in a fallback state
+        }
+        
+        // This function initializes all UI-dependent parts
+        function initializeAppUI(appId, dbInstance) {
+            setupLiveChat(appId, dbInstance);
+            fetchTotalEarnings(appId, dbInstance);
+            setupBeatListener(appId, dbInstance);
+            setupTrendingListener(appId, dbInstance); // <-- NEW: Load live trending data
+            updateUIForUser();
+            
+            // Set up navigation
+            const initialHash = window.location.hash.substring(1);
+            let targetPage;
+            if (initialHash === 'marketplace') {
+                targetPage = 'marketplace-page';
+            } else if (initialHash === 'uploader') {
+                targetPage = 'uploader-page';
+            } else {
+                targetPage = 'landing-page';
+            }
+            window.navigate(targetPage);
         }
 
         // --- CORE FUNCTIONS (Attaching to window for global access) ---
@@ -506,6 +514,54 @@
             });
         }
         
+        // NEW: LIVE A&R SCOREBOARD
+        function setupTrendingListener(appId, dbInstance) {
+            const scoreboard = document.getElementById('trending-producer-list');
+            if (!dbInstance) {
+                scoreboard.innerHTML = `<p class="text-gray-500">Error: Database connection failed.</p>`;
+                return;
+            }
+            
+            const usersCollectionPath = `/artifacts/${appId}/users`;
+            // This query finds producers (isProducer == true) and sorts them by 'sales' (descending)
+            const q = query(
+                collection(dbInstance, usersCollectionPath),
+                where("isProducer", "==", true),
+                orderBy("sales", "desc"),
+                limit(5)
+            );
+
+            onSnapshot(q, (snapshot) => {
+                scoreboard.innerHTML = ''; // Clear old list
+                if (snapshot.empty) {
+                    scoreboard.innerHTML = `<p class="text-gray-400">No producer sales yet. Be the first!</p>`;
+                    return;
+                }
+                
+                let rank = 1;
+                snapshot.forEach(doc => {
+                    const producer = doc.data();
+                    const producerElement = document.createElement('div');
+                    producerElement.className = "flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]";
+                    producerElement.onclick = () => window.viewProducerProfile(producer.displayName);
+                    producerElement.innerHTML = `
+                        <span>#${rank} ${producer.displayName}</span>
+                        <span class="text-[var(--accent-blue)] font-extrabold">£${(producer.sales * 0.9).toLocaleString('en-GB')}</span>
+                    `;
+                    scoreboard.appendChild(producerElement);
+                    rank++;
+                });
+            }, (error) => {
+                 if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions')) {
+                    console.warn("Permission denied fetching trending producers. You may need to create a Firestore Index.");
+                    scoreboard.innerHTML = `<p class="text-xs text-yellow-400">Trending data is loading... (If this persists, a DB index may be required).</p>`;
+                } else {
+                    console.error("Error fetching trending producers:", error);
+                    scoreboard.innerHTML = `<p class="text-red-500">Error loading scoreboard.</p>`;
+                }
+            });
+        }
+
         window.displayBeats = function(beats) {
             const list = document.getElementById('beats-list');
             list.innerHTML = ''; 
@@ -535,7 +591,6 @@
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
                                 Preview
                             </button>
-                            <!-- THIS IS THE NEWLY WIRED-UP BUTTON -->
                             <button onclick="window.handleBeatPurchase('${beat.id}', event)" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
                         </div>
                         
@@ -666,7 +721,7 @@
         window.handleProducerSignUp = async function() {
             const producerName = document.getElementById('producerName').value;
             const producerEmail = document.getElementById('producerEmail').value;
-            const password = "password1G"; // Mock password, ensure it meets basic requirements
+            const password = "password123"; 
             
             if (!producerName || !producerEmail) {
                 alert("Please enter your Producer Name and Email to sign up.");
@@ -1014,20 +1069,9 @@
                 <div id="trending-content" class="tab-content col-span-1 w-full">
                     <h4 class="text-xl font-bold text-white mb-3">Top Producers (All-Time Sales)</h4>
                     
-                    <div class="scoreboard-card p-4 space-y-3 w-full">
-                        <!-- Mock Data, real data would come from Firestore -->
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('DJ Shadow-box')">
-                            <span>#1 DJ Shadow-box</span>
-                            <span class="text-[var(--accent-blue)] font-extrabold">£12k</span>
-                        </div>
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('Lofi_Llama')">
-                            <span>#2 Lofi_Llama</span>
-                            <span class="text-[var(--accent-blue)] font-extrabold">£8.5k</span>
-                        </div>
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-110 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('SynthGod')">
-                            <span>#3 SynthGod</span>
-                            <span class="text-[var(--accent-blue)] font-extrabold">£6.1k</span>
-                        </div>
+                    <div id="trending-producer-list" class="scoreboard-card p-4 space-y-3 w-full">
+                        <!-- LIVE A&R DATA WILL BE LOADED HERE by setupTrendingListener() -->
+                        <p class="text-gray-400">Loading scoreboard...</p>
                     </div>
                 </div>
 
