@@ -248,8 +248,7 @@
         // IMPORTANT: Set the Project ID here
         const appId = 'beatbay-final'; 
         
-        // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
-        // This is the configuration from your personal account.
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
           apiKey: "AIzaSyCUUNgUyM45VSkSeZciutusrEx_ao1SCr0",
           authDomain: "beatbay-final.firebaseapp.com",
@@ -895,7 +894,7 @@
                 
                 <div class="p-6 bg-[#111] rounded-lg border border-[var(--border-color)]">
                     <p id="gate-form-title" class="text-sm font-semibold text-gray-300 mb-4">Artist Registration | One-time payment of <span class="text-white font-bold">£29.99</span></Vercel>
-                    <form onsubmit="event.preventDefault(); handleLifetimePurchase();">
+                    <form onsubmit="event.preventDefault(); window.handleLifetimePurchase();">
                         <label for="accessName" class="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
                         <input type="text" id="accessName" placeholder="John Doe" class="w-full p-3 mb-3 rounded-md custom-input focus-ring" required>
                         
@@ -912,7 +911,7 @@
                         </button>
                     </form>
                 </div>
-                <button onclick="hideMembershipGate()" class="mt-4 text-gray-500 hover:text-white text-sm w-full text-center">Cancel</button>
+                <button onclick="window.hideMembershipGate()" class="mt-4 text-gray-500 hover:text-white text-sm w-full text-center">Cancel</button>
             </div>
         </div>
         <!-- END MEMBERSHIP GATE -->
@@ -922,14 +921,14 @@
         <header id="header-section" class="text-center py-4">
             <div class="container mx-auto">
                 <div class="flex justify-between items-center">
-                    <a href="#landing" onclick="navigate('landing-page')" class="logo">BEATBAY</a>
+                    <a href="#landing" onclick="window.navigate('landing-page')" class="logo">BEATBAY</a>
                     <!-- NEW: PROFILE/LOGIN UI -->
                     <div id="user-profile" class="text-sm font-medium">
                         <!-- This will be populated by updateUIForUser() -->
                     </div>
                     <div class="space-x-4">
-                        <button onclick="navigate('marketplace-page')" class="nav-button nav-button-secondary">Marketplace</button>
-                        <button onclick="navigate('uploader-page')" class="nav-button nav-button-primary">Producer Portal</button>
+                        <button onclick="window.navigate('marketplace-page')" class="nav-button nav-button-secondary">Marketplace</button>
+                        <button onclick="window.navigate('uploader-page')" class="nav-button nav-button-primary">Producer Portal</button>
                     </div>
                 </div>
                 <!-- EARNINGS COUNTER -->
