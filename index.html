@@ -245,17 +245,21 @@
         
         setLogLevel('Debug');
 
+        // IMPORTANT: Set the Project ID here
         const appId = 'beatbay-final'; 
         
+        // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
+        // This is the configuration from your personal account.
         const firebaseConfig = {
-            apiKey: "AIzaSyAFRugvGYOVn44SPB9p1eovIEus-OBdS0Q",
-            authDomain: "beatbay-personal.firebaseapp.com",
-            projectId: "beatbay-final", 
-            storageBucket: "beatbay-personal.appspot.com",
-            messagingSenderId: "383555908497",
-            appId: "1:383555908497:web:ebd0f240d5551d09a7e030",
-            measurementId: "G-2XDMSERGBK"
+          apiKey: "AIzaSyCUUNgUyM45VSkSeZciutusrEx_ao1SCr0",
+          authDomain: "beatbay-final.firebaseapp.com",
+          projectId: "beatbay-final",
+          storageBucket: "beatbay-final.firebasestorage.app",
+          messagingSenderId: "482423034883",
+          appId: "1:482423034883:web:1b89ac38840a6c80ab2a36",
+          measurementId: "G-KSZJTS7C9G"
         };
+        // ---------------------------------------------
         
         if (firebaseConfig) {
             try {
@@ -263,16 +267,15 @@
                 window.db = getFirestore(app);
                 window.auth = getAuth(app);
                 window.storage = getStorage(app); 
-                window.functions = getFunctions(app, 'us-central1'); 
+                window.functions = getFunctions(app, 'us-central1'); // Initialize Functions
                 
-                // onAuthStateChanged IS THE SINGLE SOURCE OF TRUTH
                 onAuthStateChanged(window.auth, async (user) => {
                     try { 
                         if (user) {
                             window.userId = user.uid;
                             window.globalUserName = user.displayName || `User_${window.userId.substring(0, 4)}`;
                             
-                            // Check user's status (paid/producer) from Firestore
+                            // --- REAL AUTH CHECK ---
                             try {
                                 const userDocRef = doc(window.db, `/artifacts/${appId}/users/${window.userId}`);
                                 const userDocSnap = await getDoc(userDocRef);
@@ -997,10 +1000,10 @@
         <section id="marketplace-page" class="main-page-section hidden">
             <!-- TAB NAVIGATION -->
             <div class="flex border-b border-[var(--border-color)] mb-6">
-                <button id="tab-trending" class="tab-button active" onclick="switchTab('trending')">
+                <button id="tab-trending" class="tab-button active" onclick="window.switchTab('trending')">
                     🔥 Trending Producers (Scoreboard)
                 </button>
-                <button id="tab-discover" class="tab-button" onclick="switchTab('discover')">
+                <button id="tab-discover" class="tab-button" onclick="window.switchTab('discover')">
                     🎵 Discover Beats (Filters)
                 </button>
             </div>
@@ -1014,15 +1017,15 @@
                     
                     <div class="scoreboard-card p-4 space-y-3 w-full">
                         <!-- Mock Data, real data would come from Firestore -->
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('DJ Shadow-box')">
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('DJ Shadow-box')">
                             <span>#1 DJ Shadow-box</span>
                             <span class="text-[var(--accent-blue)] font-extrabold">£12k</span>
                         </div>
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('Lofi_Llama')">
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-150 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('Lofi_Llama')">
                             <span>#2 Lofi_Llama</span>
                             <span class="text-[var(--accent-blue)] font-extrabold">£8.5k</span>
                         </div>
-                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-110 p-2 rounded-md bg-[var(--card-bg)]" onclick="viewProducerProfile('SynthGod')">
+                        <div class="flex justify-between items-center text-lg font-semibold cursor-pointer hover:text-[var(--accent-blue)] transition duration-110 p-2 rounded-md bg-[var(--card-bg)]" onclick="window.viewProducerProfile('SynthGod')">
                             <span>#3 SynthGod</span>
                             <span class="text-[var(--accent-blue)] font-extrabold">£6.1k</span>
                         </div>
@@ -1059,7 +1062,7 @@
                 <div id="producer-signup-form">
                     <h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3">Become a Beatbay Producer</h3>
                     <p class="text-gray-400 mb-6">Join for **free**. List your beats and secure your 50% publishing automatically on every sale. No chasing, no disputes. Just clarity.</p>
-                    <form onsubmit="event.preventDefault(); handleProducerSignUp();">
+                    <form onsubmit="event.preventDefault(); window.handleProducerSignUp();">
                         <label for="producerName" class="block text-sm font-medium text-gray-300 mb-1">Producer Name *</label>
                         <input type="text" id="producerName" placeholder="e.g. 'BeatGenius'" class="w-full p-3 mb-3 rounded-lg custom-input focus-ring" required>
                         <label for="producerEmail" class="block text-sm font-medium text-gray-300 mb-1">Email *</label>
@@ -1075,7 +1078,7 @@
                     <h3 class="text-3xl font-extrabold text-[var(--accent-blue)] mb-3">Manual Beat Uploader (V1)</h3>
                     <p class="text-gray-400 mb-6">Welcome, <span id="producer-welcome-name" class="font-bold text-white">Producer</span>! Fill out the form to list a new beat. All fields are required. Price is capped at £9.99.</p>
                     
-                    <form id="manual-upload-form" onsubmit="event.preventDefault(); handleManualBeatUpload();">
+                    <form id="manual-upload-form" onsubmit="event.preventDefault(); window.handleManualBeatUpload();">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="beatTitle" class="block text-sm font-medium text-gray-300 mb-1">Beat Title *</label>
