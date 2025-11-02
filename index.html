@@ -228,7 +228,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp, limit, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-functions.js";
@@ -248,7 +248,6 @@
         const appId = 'beatbay-final'; 
         
         // --- FINAL FIREBASE CONFIGURATION (For 'beatbay-final' project) ---
-        // This is the CORRECT configuration from your personal account.
         const firebaseConfig = {
           apiKey: "AIzaSyCUUNgUyM45VSkSeZciutusrEx_ao1SCr0",
           authDomain: "beatbay-final.firebaseapp.com",
@@ -270,7 +269,7 @@
                 
                 onAuthStateChanged(window.auth, async (user) => {
                     try { 
-                        if (user) {
+                        if (user && !user.isAnonymous) {
                             window.userId = user.uid;
                             window.globalUserName = user.displayName || `User_${window.userId.substring(0, 4)}`;
                             
@@ -308,18 +307,19 @@
                             
                         } else {
                             // User is signed out or anonymous
-                            await signInAnonymously(window.auth);
-                            console.log("Firebase: Signed in anonymously.");
+                            if (!user) {
+                                await signInAnonymously(window.auth);
+                                console.log("Firebase: Signed in anonymously.");
+                            }
                             
                             // Reset state for guest
-                            window.userId = null;
+                            window.userId = user ? user.uid : null;
                             window.globalUserName = 'Anonymous';
                             window.isPaid = false;
                             window.isProducer = false;
                         }
 
                         // This MUST be called *after* auth state is confirmed
-                        // This initializes all UI components and listeners
                         initializeAppUI(appId, window.db);
 
                     } catch (authError) { 
@@ -348,13 +348,11 @@
             
             // Set up navigation
             const initialHash = window.location.hash.substring(1);
-            let targetPage;
+            let targetPage = 'landing-page'; // Default
             if (initialHash === 'marketplace') {
                 targetPage = 'marketplace-page';
             } else if (initialHash === 'uploader') {
                 targetPage = 'uploader-page';
-            } else {
-                targetPage = 'landing-page';
             }
             window.navigate(targetPage);
         }
@@ -398,12 +396,12 @@
             const chatCollectionPath = `/artifacts/${appId}/public/data/global_chat`;
 
             if (dbInstance) {
-                const q = query(collection(dbInstance, chatCollectionPath), limit(50)); 
+                const q = query(collection(dbInstance, chatCollectionPath), orderBy("timestamp", "desc"), limit(50)); 
                 
                 onSnapshot(q, (snapshot) => {
                     const messages = [];
                     snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
-                    messages.sort((a, b) => (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0));
+                    messages.reverse(); // Show newest at the bottom
                     
                     chatWindow.innerHTML = ''; 
                     messages.forEach((message) => { 
@@ -470,16 +468,17 @@
                 document.getElementById('discover-title').textContent = `Algorithmic Discovery`;
             }
             if (tabName === 'trending') {
-                window.displayBeatsListPlaceholder();
+                // This tab is now driven by the setupTrendingListener
             }
         }
 
         window.displayBeatsListPlaceholder = function() {
-            document.getElementById('beats-list').innerHTML = `
-                <div class="col-span-full text-center p-8 text-gray-400">
-                     <p class="text-xl">Select a producer profile on the left to see their full catalog, or use the Discover tab.</p>
-                </div>
-            `;
+            // This is now populated by the live scoreboard
+            // document.getElementById('beats-list').innerHTML = `
+            //     <div class="col-span-full text-center p-8 text-gray-400">
+            //          <p class="text-xl">Select a producer profile on the left to see their full catalog, or use the Discover tab.</p>
+            //     </div>
+            // `;
         }
 
         window.viewProducerProfile = function(producerName) {
@@ -546,7 +545,7 @@
                     producerElement.onclick = () => window.viewProducerProfile(producer.displayName);
                     producerElement.innerHTML = `
                         <span>#${rank} ${producer.displayName}</span>
-                        <span class="text-[var(--accent-blue)] font-extrabold">£${(producer.sales * 0.9).toLocaleString('en-GB')}</span>
+                        <span class="text-[var(--accent-blue)] font-extrabold">£${(producer.sales || 0).toLocaleString('en-GB')}</span>
                     `;
                     scoreboard.appendChild(producerElement);
                     rank++;
@@ -591,6 +590,7 @@
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
                                 Preview
                             </button>
+                            <!-- THIS IS THE NEWLY WIRED-UP BUTTON -->
                             <button onclick="window.handleBeatPurchase('${beat.id}', event)" class="buy-button px-4 py-2 bg-[var(--cta-blue)] text-white font-bold rounded-lg hover:bg-[#2563eb] transition duration-200 shadow-md" data-beat-id="${beat.id}">BUY & SPLIT</button>
                         </div>
                         
@@ -757,7 +757,8 @@
                 displayName: producerName,
                 email: producerEmail,
                 isPaid: false, 
-                isProducer: true
+                isProducer: true,
+                sales: 0 // Initialize sales for A&R scoreboard
             }, { merge: true });
 
             alert(`Welcome, ${producerName}! You can now upload beats.`);
